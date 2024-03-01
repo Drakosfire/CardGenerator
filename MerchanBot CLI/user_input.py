@@ -6,9 +6,8 @@ import sys
 
 image_path = str
 end_phrase = """<|end_of_turn|>"""
-card_template_path = "./card_templates/"
+card_template_path = "./card_templates"
 list_of_card_templates = u.directory_contents(card_template_path)
-paths_of_card_templates_list = [card_template_path + path for path in list_of_card_templates]
 
 user_pick_template_prompt = "Pick a template number from this list : "
 user_pick_image_prompt = "Select an image : "

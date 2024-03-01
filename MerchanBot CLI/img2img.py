@@ -8,10 +8,10 @@ from PIL import Image
 
 start_time = time.time()
 torch.backends.cuda.matmul.allow_tf32 = True
-model_path = ("../models/stable-diffusion/SDXLFaetastic_v24.safetensors")
-lora_path = "../models/stable-diffusion/Loras/blank-card-template-5.safetensors"
-detail_lora_path = "../models/stable-diffusion/Loras/add-detail-xl.safetensors"
-mimic_lora_path = "../models/stable-diffusion/Loras/EnvyMimicXL01.safetensors"
+model_path = ("../../models/stable-diffusion/SDXLFaetastic_v24.safetensors")
+lora_path = "../../models/stable-diffusion/Loras/blank-card-template-5.safetensors"
+detail_lora_path = "../../models/stable-diffusion/Loras/add-detail-xl.safetensors"
+mimic_lora_path = "../../models/stable-diffusion/Loras/EnvyMimicXL01.safetensors"
 
 card_pre_prompt = " blank magic card,high resolution, detailed intricate high quality border, textbox, high quality magnum opus drawing of a "
 negative_prompts = "text, words, numbers, letters"
@@ -20,7 +20,7 @@ image_list = []
 def generate_image(num_img, prompt, item, user_input_template, mimic = None) :
     prompt = card_pre_prompt + item + ' ' + prompt
     print(prompt)
-    image_path = f"{user_input_template}"
+    image_path = f"card_templates/{user_input_template}"
     init_image = load_image(image_path).convert("RGB")
     
     pipe = StableDiffusionXLImg2ImgPipeline.from_single_file(model_path,

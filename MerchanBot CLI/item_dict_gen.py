@@ -64,10 +64,9 @@ prompt_instructions = """ **Purpose**: Generate a structured inventory entry for
 **Instructions**:
 1. Replace `{item}` with the name of your item, enclosed in single quotes (e.g., `'Magic Wand'`).
 2. Ensure your request is formatted as a hashmap. Do not add quotation marks around the dictionary's `Quote` value.
-3. The quote and SD Prompt MUST be inside double quotations ie " ".
-4. The quote is strange and interesting and from the perspective of someone commenting on the impact of the {item} on their life
-5. Value should be assigned as an integer of copper pieces (cp), silver pieces (sp), electrum pieces (ep), gold pieces (gp), and platinum pieces (pp). .
-6. Use this table for reference on value : 
+3. The quote should be strange and interesting and from the perspective of someone commenting on the impact of the {item} on their life
+4. Value should be assigned as an integer of copper pieces (cp), silver pieces (sp), electrum pieces (ep), gold pieces (gp), and platinum pieces (pp). .
+5. Use this table for reference on value : 
 1 cp 	1 lb. of wheat
 2 cp 	1 lb. of flour or one chicken
 5 cp 	1 lb. of salt
@@ -82,7 +81,7 @@ prompt_instructions = """ **Purpose**: Generate a structured inventory entry for
 50 gp 	1 lb. of gold
 500 gp 	1 lb. of platinum
 
-7. Examples of Magical Scroll Value:
+6. Examples of Magical Scroll Value:
     Common: 50-100 gp
     Uncommon: 101-500 gp
     Rare: 501-5000 gp
@@ -95,13 +94,13 @@ A scroll's rarity depends on the spell's level:
     6-8: Very rare
     9: Legendary
 
-8. Explanation of Mimics:
+7. Explanation of Mimics:
 Mimics are shapeshifting predators able to take on the form of inanimate objects to lure creatures to their doom. In dungeons, these cunning creatures most often take the form of doors and chests, having learned that such forms attract a steady stream of prey.
 Imitative Predators. Mimics can alter their outward texture to resemble wood, stone, and other basic materials, and they have evolved to assume the appearance of objects that other creatures are likely to come into contact with. A mimic in its altered form is nearly unrecognizable until potential prey blunders into its reach, whereupon the monster sprouts pseudopods and attacks.
 When it changes shape, a mimic excretes an adhesive that helps it seize prey and weapons that touch it. The adhesive is absorbed when the mimic assumes its amorphous form and on parts the mimic uses to move itself.
 Cunning Hunters. Mimics live and hunt alone, though they occasionally share their feeding grounds with other creatures. Although most mimics have only predatory intelligence, a rare few evolve greater cunning and the ability to carry on simple conversations in Common or Undercommon. Such mimics might allow safe passage through their domains or provide useful information in exchange for food.
 
-9. 
+8. 
 **Format Example**:
 - **Dictionary Structure**:
     
@@ -114,8 +113,8 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Damage': '{damage formula} , 'damage type}',
     'Weight': '{weight}',
     'Description': '{item description}',
-    'Quote': "{item quote}",
-    'SD Prompt': "{special description for the item}"
+    'Quote': '{item quote}',
+    'SD Prompt': '{special description for the item}'
     } }
     
 - **Input Placeholder**:
@@ -132,8 +131,8 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Properties': ['Grants invisibility in dim light or darkness','Allows communication with shadows for gathering information'],
     'Weight': '1 lb',
     'Description': 'A cloak woven from the essence of twilight, blending its wearer into the shadows. Whispers of the past and present linger in its folds, offering secrets to those who listen.',
-    'Quote': "In the embrace of night, secrets surface in the silent whispers of the dark.",
-    'SD Prompt': " decorated with shimmering threads that catch the light to mimic stars." 
+    'Quote': 'In the embrace of night, secrets surface in the silent whispers of the dark.',
+    'SD Prompt': ' decorated with shimmering threads that catch the light to mimic stars.' 
     } }   
     
 2. Health Potion Entry:
