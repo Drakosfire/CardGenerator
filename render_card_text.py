@@ -50,9 +50,8 @@ def adjust_font_size_lines_and_spacing(text, font_path, initial_font_size, max_w
         
     return optimal_font_size, optimal_lines, line_spacing     
 # Function that takes in an image,text and properties for textfrom card_generator 
-def render_text_with_dynamic_spacing(image, text, center_position, max_width, area_height,font_path, initial_font_size, item_key = None, description = None, quote = None):
-    if item_key:
-        text = write_description(item_key)
+def render_text_with_dynamic_spacing(image, text, center_position, max_width, area_height,font_path, initial_font_size,description = None, quote = None):
+    
 
     optimal_font_size, optimal_lines, line_spacing = adjust_font_size_lines_and_spacing(
         text, font_path, initial_font_size, max_width, area_height, image)
@@ -92,11 +91,7 @@ def render_text_with_dynamic_spacing(image, text, center_position, max_width, ar
     return image   
 
 # Function to put the description objects together, this will be the complicated bit, I think iterate through keys excluding title, type and cost
-def write_description(item_key):
-    skip_list = ['Name', 'Type', 'Value', 'Weight', 'Damage', 'SD Prompt', 'Quote', 'Rarity']    
-    description_list = ['\n'.join(value) for key, value in item_key.items() if key not in skip_list and type(value) == list]
-    description_list += [value if key not in skip_list else '' for key, value in item_key.items() if type(value) != list]
-    return '\n'.join(filter(None, description_list))
+
 
 
 
