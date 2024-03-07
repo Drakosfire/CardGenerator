@@ -6,11 +6,10 @@ import utilities as u
 import card_generator as card
 from PIL import Image
 
-pipe = None
 start_time = time.time()
 torch.backends.cuda.matmul.allow_tf32 = True
 vae = AutoencoderKL.from_pretrained("sdxl_vae/", torch_dtype=torch.float16).to("cuda")
-model_path = ("../models/stable-diffusion/card-generator-v1.safetensors")
+model_path = ("../models/stable-diffusion/SDXLFaetastic_v24.safetensors")
 lora_path = "../models/stable-diffusion/Loras/blank-card-template-5.safetensors"
 detail_lora_path = "../models/stable-diffusion/Loras/add-detail-xl.safetensors"
 mimic_lora_path = "../models/stable-diffusion/Loras/EnvyMimicXL01.safetensors"
@@ -30,9 +29,10 @@ def load_img_gen(prompt, item, user_input_template, mimic = None):
                                                        custom_pipeline="low_stable_diffusion",                                                       
                                                          torch_dtype=torch.float16, 
                                                          variant="fp16",
-                                                            local_files_only = True).to("cuda")  
+                                                            local_files_only = True).to("cuda")
+   
     # Load LoRAs for controlling image
-    #pipe.load_lora_weights(lora_path, weight_name = "blank-card-template-5.safetensors",adapter_name = 'blank-card-template')    
+    pipe.load_lora_weights(lora_path, weight_name = "blank-card-template-5.safetensors",adapter_name = 'blank-card-template')    
     pipe.load_lora_weights(detail_lora_path, weight_name = "add-detail-xl.safetensors", adapter_name = "add-detail-xl")
     
     # If mimic keyword has been detected, load the mimic LoRA and set adapter values
@@ -40,7 +40,7 @@ def load_img_gen(prompt, item, user_input_template, mimic = None):
         pipe.load_lora_weights(mimic_lora_path, weight_name = "EnvyMimicXL01.safetensors", adapter_name = "EnvyMimicXL")
         pipe.set_adapters(['blank-card-template', "add-detail-xl", "EnvyMimicXL"], adapter_weights = [0.9,0.9,1.0])
     else : 
-        pipe.set_adapters([ "add-detail-xl"], adapter_weights = [0.9])       
+        pipe.set_adapters(['blank-card-template', "add-detail-xl"], adapter_weights = [0.9,0.9])       
     pipe.enable_vae_slicing()
     return pipe, prompt, init_image
 
@@ -66,7 +66,8 @@ def preview_and_generate_image(x,pipe, prompt, user_input_template, item):
     print(image_list)
     total_time = time.time() - start_time
     print(total_time)
-
+    del pipe
+    u.reclaim_mem()
     return output_image_path
 
 

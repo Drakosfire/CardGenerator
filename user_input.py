@@ -3,12 +3,25 @@ import img2img
 import card_generator as card
 import utilities as u
 import sys
+import tempfile
+from PIL import Image
 
 image_path = str
 end_phrase = """<|end_of_turn|>"""
+# Indexing the contents of Card templates and temp images
 card_template_path = "./card_templates/"
-list_of_card_templates = u.directory_contents(card_template_path)
-paths_of_card_templates_list = [card_template_path + path for path in list_of_card_templates]
+temp_image_path = "./image_temp"
+def index_image_paths(directory_path):
+    list_temp_files = []
+    list_of_image_paths = u.directory_contents(directory_path)
+    for image_path in list_of_image_paths:
+        image_path = "https://raw.githubusercontent.com/Drakosfire/CardGenerator/main/card_templates/"+ image_path
+        
+        
+            
+        list_temp_files.append(image_path)
+    return list_temp_files
+
 
 user_pick_template_prompt = "Pick a template number from this list : "
 user_pick_image_prompt = "Select an image : "
@@ -53,7 +66,7 @@ def call_llm(user_input):
     if not response:
         response = call_llm(user_input)
     del llm_call
-    return response 
+    return response
 
 def prompt_user_input():
     mimic = None
@@ -82,5 +95,5 @@ def prompt_user_input():
 
 
 
-print(list_of_card_templates)
+
 
