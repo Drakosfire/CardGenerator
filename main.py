@@ -1,13 +1,13 @@
-import item_dict_gen as igen 
+
 import img2img 
 import card_generator as card
 import utilities as u
 import ctypes
 import user_input as useri
 import gradio as gr
-from gradio import State
-import threading
-import time
+import template_builder as tb
+
+
 
 # This is a fix for the way that python doesn't release system memory back to the OS and it was leading to locking up the system
 libc = ctypes.cdll.LoadLibrary("libc.so.6")
@@ -53,6 +53,7 @@ with gr.Blocks() as app:
     generated_image_list = gr.State([])
     selected_generated_image = gr.State()
     selected_seed_image = gr.State()
+    built_template = gr.State()
     mimic = None
 
     def set_textbox_defaults(textbox_default_dict, key):
@@ -103,30 +104,33 @@ with gr.Blocks() as app:
         selected_border_path = img_dict['image']['url']
         return selected_border_path  
     
+     # Make a list of files in image_temp and delete them
+    def delete_temp_images():
+        image_list = u.directory_contents('./image_temp')
+        u.delete_files(image_list)
+        img2img.image_list.clear()
+    
     # Called when pressing button to generate image, updates gallery by returning the list of image URLs
-    def generate_image_update_gallery(num_img, sd_prompt,item_name, selected_border):
+    def generate_image_update_gallery(num_img, sd_prompt,item_name, built_template):
         delete_temp_images()
+        print(type(built_template))
         image_list = []
-        img_gen, prompt, user_input_template = img2img.load_img_gen(sd_prompt, item_name,selected_border)
+        img_gen, prompt = img2img.load_img_gen(sd_prompt, item_name)
         for x in range(num_img):
-            preview = img2img.preview_and_generate_image(x,img_gen, prompt, user_input_template, item_name)
+            preview = img2img.preview_and_generate_image(x,img_gen, prompt, built_template, item_name)
             image_list.append(preview)
             yield image_list
             #generate_gallery.change(image_list)
         del preview
         u.reclaim_mem()
 
-
-
         #generated_image_list = img2img.generate_image(num_img,sd_prompt,item_name,selected_border)
         return image_list
     
-    
-    # Make a list of files in image_temp and delete them
-    def delete_temp_images():
-        image_list = u.directory_contents('./image_temp')
-        u.delete_files(image_list)
-        img2img.image_list.clear()
+    def build_template(selected_border, selected_seed_image):
+        image_list = tb.build_card_template(selected_border, selected_seed_image)
+        return image_list, image_list
+   
 
     # Beginning of page format
     # Title
@@ -143,11 +147,15 @@ with gr.Blocks() as app:
         gr.HTML(""" <div id="inner"> <header>
                 <h3>Step 2 : Click a seed image </h3>
                     </div>""")
+    # Holding place for reset button for template builder.
+    # reset_button = gr.Button(value = "Reset Template")
+    # delete_gallery_button.click(delete_temp_images)
+
     with gr.Row():
         
         
         border_gallery = gr.Gallery(label = "Card Template Choices", 
-                                    value = useri.index_image_paths("./seed_image/card_templates/"),
+                                    value = useri.index_image_paths("./seed_images/card_templates/", "card_templates/"),
                                     show_label = True,
                                     columns = [5], rows = [2],
                                     object_fit = "contain",
@@ -157,17 +165,28 @@ with gr.Blocks() as app:
         border_gallery.select(assign_img, outputs = selected_border_image)
 
         seed_image_gallery = gr.Gallery(label= "Item Image Seed",
-                                        value = useri.index_image_paths("./seed_image/card_templates/"),
+                                        value = useri.index_image_paths("./seed_images/item_seeds/","item_seeds/"),
                                         show_label = True,
                                         columns = [5], rows = [4],
                                         object_fit = "contain",
                                         height = "auto",
                                         elem_id = "Template Gallery") 
         
-        border_gallery.select(assign_img, outputs = selected_seed_image)
+        built_template_gallery = gr.Gallery(label= "Built Template",
+                                        value = None,
+                                        show_label = True,
+                                        columns = [5], rows = [4],
+                                        object_fit = "contain",
+                                        height = "auto",
+                                        elem_id = "Template Gallery") 
+        
+        seed_image_gallery.select(assign_img, outputs = selected_seed_image)
+
+    build_card_template_button = gr.Button(value = "Build Card Template")
+    build_card_template_button.click(build_template, inputs = [selected_border_image, selected_seed_image], outputs = [built_template_gallery, built_template]) 
         
     gr.HTML(""" <div id="inner"> <header>
-                    <h3>Step 2 : Use one to four words to describe an item </h3>
+                    <h3>Step 3 : Use some words to name your item </h3>
                     </div>""")  
     
     user_input =  gr.Textbox(label = 'What is the item?', lines =1, placeholder= "Spoon of Tasting", elem_id= "Item")
@@ -196,9 +215,7 @@ with gr.Blocks() as app:
            
             
             card_gen_button = gr.Button(value = "Step 5 : Generate 4 possible blank cards, takes about 65 seconds", elem_id="Generate Card Button")
-            delete_gallery_button = gr.Button(value = "Delete Gallery", elem_id="Delete Gallery Button")
-            delete_gallery_button.click(delete_temp_images)
-
+           
     # No longer Row Context, in context of entire Block
 
     generate_final_item_card = gr.Button(value = "Generate my item card!", elem_id = "Generate user card")
@@ -212,7 +229,7 @@ with gr.Blocks() as app:
                                 elem_id = "Generated Cards Gallery"
                                 )
     
-    card_gen_button.click(fn = generate_image_update_gallery, inputs =[num_image_to_generate,item_sd_prompt_output,item_name_output,selected_border_image], outputs= generate_gallery)
+    card_gen_button.click(fn = generate_image_update_gallery, inputs =[num_image_to_generate,item_sd_prompt_output,item_name_output,built_template], outputs= generate_gallery)
     generate_gallery.select(assign_img, outputs = selected_generated_image)
 
         # Button logice calls function when button object is pressed, passing inputs and passing output to components

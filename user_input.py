@@ -11,14 +11,12 @@ end_phrase = """<|end_of_turn|>"""
 # Indexing the contents of Card templates and temp images
 card_template_path = "./card_templates/"
 temp_image_path = "./image_temp"
-def index_image_paths(directory_path):
+def index_image_paths(directory_path, github_path):
     list_temp_files = []
     list_of_image_paths = u.directory_contents(directory_path)
     for image_path in list_of_image_paths:
-        image_path = "https://raw.githubusercontent.com/Drakosfire/CardGenerator/main/card_templates/"+ image_path
-        
-        
-            
+        image_path = f"https://raw.githubusercontent.com/Drakosfire/CardGenerator/alpha-templates/seed_images/{github_path}{image_path}"
+        print(image_path)
         list_temp_files.append(image_path)
     return list_temp_files
 

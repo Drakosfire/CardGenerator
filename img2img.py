@@ -20,11 +20,11 @@ negative_prompts = "text, words, numbers, letters"
 image_list = []
 
 
-def load_img_gen(prompt, item, user_input_template, mimic = None):
+def load_img_gen(prompt, item, mimic = None):
     prompt = card_pre_prompt + item + ' ' + prompt
     print(prompt)
-    image_path = f"{user_input_template}"
-    init_image = load_image(image_path).convert("RGB")
+    # image_path = f"{user_input_template}"
+    # init_image = load_image(image_path).convert("RGB")
     
     pipe = StableDiffusionXLImg2ImgPipeline.from_single_file(model_path,
                                                        custom_pipeline="low_stable_diffusion",                                                       
@@ -42,7 +42,7 @@ def load_img_gen(prompt, item, user_input_template, mimic = None):
     else : 
         pipe.set_adapters([ "add-detail-xl"], adapter_weights = [0.9])       
     pipe.enable_vae_slicing()
-    return pipe, prompt, init_image
+    return pipe, prompt
 
 def preview_and_generate_image(x,pipe, prompt, user_input_template, item):    
     img_start = time.time()   
