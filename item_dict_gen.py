@@ -171,7 +171,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Type' : 'Armor, Shield',
     'Rarity': 'Common',
     'Value': '10 gp',
-    'Properties': ['+2 AC'],
+    'Properties': ["+2 AC"],
     'Weight': '6 lb',
     'Description': "Sturdy and reliable, this wooden shield is a simple yet effective defense against the blows of adversaries.",
     'Quote': "In the rhythm of battle, it dances - a barrier between life and defeat.",
@@ -185,11 +185,11 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Type' : 'Magical Item (armor, helmet)',
     'Rarity': 'Very Rare', 
     'Value': '3000 gp',
-    'Properties': ['+ 1 to AC', 'Grants the wearer advantage on perception checks', '+5 to passive perception'],
+    'Properties': ["+ 1 to AC", "Grants the wearer advantage on perception checks", "+5 to passive perception"],
     'Weight': '3 lb',
     'Description': "Forged from mystic metals and enchanted with ancient spells, this helmet offers protection beyond the physical realm.",
     'Quote': "A crown not of royalty, but of unyielding vigilance, warding off the unseen threats that lurk in the shadows.",
-    'SD Prompt': " a mystical helmet crafted from enchanted metals, glowing with subtle runes.  imbued with spells, radiates a mystical aura, symbolizing enhanced perception and vigilance.elegant,  formidable" 
+    'SD Prompt': " a mystical helmet crafted from enchanted metals, glowing with subtle runes.  imbued with spells, radiates a mystical aura, symbolizing enhanced perception and vigilance,elegant,formidable" 
     } }
     
 5. Longbow Entry:
@@ -199,12 +199,12 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Type': 'Ranged Weapon (martial, longbow)',
     'Rarity': 'Common',
     'Value': '50 gp',
-    'Properties': ['2-handed', 'Range 150/600', 'Loading'],
+    'Properties': ["2-handed", "Range 150/600", "Loading"],
     'Damage': '1d8 + Dex, piercing',
     'Weight': '6 lb',
     'Description': "With a sleek and elegant design, this longbow is crafted for speed and precision, capable of striking down foes from a distance.",
     'Quote': "From the shadows it emerges, a silent whisper of steel that pierces the veil of darkness, bringing justice to those who dare to trespass.",
-    'SD Prompt' : "high quality magnum opus drawing of a longbow with a quiver attached" 
+    'SD Prompt' : "a longbow with intricate carvings and stone inlay with a black string" 
     } }
     
 
@@ -214,7 +214,8 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Name': "Mace",
     'Type': 'Melee Weapon (martial, bludgeoning)',
     'Rarity': 'Common',
-    'Value': '25 gp', 'Properties': ['Bludgeoning', 'One-handed'],
+    'Value': '25 gp',
+    'Properties': ["Bludgeoning", "One-handed"],
     'Damage': '1d6 + str, bludgeoning',
     'Weight': '6 lb', 
     'Description': "This mace is a fearsome sight, its head a heavy and menacing ball of metal designed to crush bone and break spirits.", 
@@ -229,7 +230,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Type': 'Magical Item (transportation)', 
     'Rarity': 'Very Rare',
     'Value': '3000 gp', 
-    'Properties': ['Flying', 'Personal Flight', 'Up to 2 passengers', Speed : 60 ft], 
+    'Properties': ["Flying", "Personal Flight", "Up to 2 passengers", Speed : 60 ft], 
     'Weight': '50 lb', 
     'Description': "This enchanted carpet whisks its riders through the skies, providing a swift and comfortable mode of transport across great distances.",
     'Quote': "Soar above the mundane, and embrace the winds of adventure with this magical gift from the heavens.", 
@@ -244,8 +245,8 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Rarity': 'Uncommon'
     'Value': '500 gp',
     'Properties': [
-        "Generates a new story or piece of lore each day',
-        'Reading a story grants insight or a hint towards solving a problem or puzzle'
+        "Generates a new story or piece of lore each day",
+        "Reading a story grants insight or a hint towards solving a problem or puzzle"
     ],
     'Weight': '3 lbs',
     'Description': "An ancient tome bound in leather that shifts colors like the sunset. Its pages are never-ending, filled with tales from worlds both known and undiscovered.",
@@ -260,7 +261,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Type': 'Ring',
     'Rarity': 'Rare',
     'Value': '1500 gp',
-    'Properties': ['Summons a miniature beast ally once per day', 'Beast follows commands and lasts for 1 hour', 'Choice of beast changes with each dawn'],
+    'Properties': ["Summons a miniature beast ally once per day", "Beast follows commands and lasts for 1 hour", "Choice of beast changes with each dawn"],
     'Weight': '0 lb',
     'Description': "A delicate ring with a gem that shifts colors. When activated, it brings forth a small, loyal beast companion from the ether.",
     'Quote': "Not all companions walk beside us. Some are summoned from the depths of magic, small in size but vast in heart.",
@@ -275,7 +276,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Type': 'Spoon',
     'Rarity': 'Uncommon',
     'Value': '200 gp',
-    'Properties': ['When used to taste any dish, it can instantly tell you all the ingredients', 'Provides exaggerated compliments or critiques about the dish'],
+    'Properties': ["When used to taste any dish, it can instantly tell you all the ingredients", "Provides exaggerated compliments or critiques about the dish"],
     'Weight': '0.2 lb',
     'Description': "A culinary critic’s dream or nightmare. This spoon doesn’t hold back its opinions on any dish it tastes.",
     'Quote': "A spoonful of sugar helps the criticism go down.",
@@ -290,10 +291,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Rarity': 'Legendary',
     'Value': '25000',
     'Properties': [
-        'Endlessly Extends with New Knowledge',
-        'Reveals Content Based on Reader’s Need or Desire',
-        'Cannot be Fully Transcribed'
-    ],
+        "Endlessly Extends with New Knowledge","Reveals Content Based on Reader’s Need or Desire","Cannot be Fully Transcribed"],
     'Weight': '0.5 lb',
     'Description': "This scroll appears to be a standard parchment at first glance. However, as one begins to read, it unrolls to reveal an ever-expanding tapestry of knowledge, lore, and spells that seems to have no end.",
     'Quote': "In the pursuit of knowledge, the horizon is ever receding. So too is the content of this scroll, an endless journey within a parchment’s bounds.",
@@ -307,11 +305,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Type': 'Trap',
     'Rarity': 'Rare',
     'Value': '1000 gp',  # Increased value reflects its dangerous and rare nature
-    'Properties': [
-        'Deceptively inviting',
-        'Springs to life when interacted with',
-        'Capable of attacking unwary adventurers'
-        ],
+    'Properties': ["Deceptively inviting","Springs to life when interacted with","Capable of attacking unwary adventurers"],
     'Weight': '50 lb',  # Mimics are heavy due to their monstrous nature
     'Description': "This enticing treasure chest is a deadly Mimic, luring adventurers with the promise of riches only to unleash its monstrous true form upon those who dare to approach, turning their greed into a fight for survival.",
     'SD Prompt': "A seemingly ordinary treasure chest that glimmers with promise. Upon closer inspection, sinister, almost living edges move with malice, revealing its true nature as a Mimic, ready to unleash fury on the unwary."
@@ -325,17 +319,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Rarity': 'Legendary',
     'Value': '16000',
     'Damage': '2d6 + 1 (martial, bludgeoning)',
-    'Properties': [
-        'requires attunement',
-        'Giant's Bane',
-        'must be wearing a belt of giant strength and gauntlets of ogre power',
-        'Str +4',
-        'Can excees 20 but not 30',
-        '20 against giant, DC 17 save against death',
-        '5 charges, expend 1 to make a range attack 20/60',
-        'ranged attack releases thunderclap on hit, DC 17 save against stunned 30 ft',
-        'regain 1d4+1 charges at dawn'
-        ],
+    'Properties': ["requires attunement","Giant's Bane","must be wearing a belt of giant strength and gauntlets of ogre power","Str +4","Can excees 20 but not 30","20 against giant, DC 17 save against death","5 charges, expend 1 to make a range attack 20/60","ranged attack releases thunderclap on hit, DC 17 save against stunned 30 ft","regain 1d4+1 charges at dawn"],
     'Weight': 15 lb',
     'Description': "God-forged and storm-bound, a supreme force, its rune-etched head blazing with power. More than a weapon, it's a symbol of nature's fury, capable of reshaping landscapes and commanding elements with every strike.",
     'Quote': "When the skies rage and the earth trembles, know that the Hammer of Thunderbolts has found its mark. It is not merely a weapon, but the embodiment of the storm\'s wrath wielded by those deemed worthy.",
@@ -349,7 +333,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Type': 'Magical Item',
     'Rarity': 'Uncommon',
     'Value': '500 gp',
-    'Properties': ['Provides dim light in a 20-foot radius', 'Invisibility to darkness-based senses', 'Can cast Darkness spell once per day'],
+    'Properties': ["Provides dim light in a 20-foot radius", "Invisibility to darkness-based senses", "Can cast Darkness spell once per day"],
     'Weight': '1 lb',
     'Description': "A small lamp carved from obsidian and powered by a mysterious force, it casts an eerie glow that illuminates its surroundings while making the wielder invisible to those relying on darkness-based senses.",
     'Quote': "In the heart of shadow lies an unseen light, casting away darkness and revealing what was once unseen.",
@@ -363,7 +347,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Type': 'Magical Item',
     'Rarity': 'Rare',
     'Value': '600 gp',
-    'Properties': ['Reflects only darkness when viewed from one side', 'Grants invisibility to its reflection', 'Can be used to cast Disguise Self spell once per day'],
+    'Properties': ["Reflects only darkness when viewed from one side", "Grants invisibility to its reflection", "Can be used to cast Disguise Self spell once per day"],
     'Weight': '2 lb',
     'Description': "An ordinary-looking mirror with a dark, almost sinister tint. It reflects only darkness and distorted images when viewed from one side, making it an ideal tool for spies and those seeking to hide their true identity.",
     'Quote': "A glass that hides what lies within, a surface that reflects only darkness and deceit.",
@@ -378,7 +362,7 @@ Cunning Hunters. Mimics live and hunt alone, though they occasionally share thei
     'Rarity': 'Very Rare',
     'Value': '8000 gp',
     'Damage': '2d6 + Str slashing',
-    'Properties': ['Adds +2 to attack and damage rolls while wielder is under the effects of Moonbeam or Daylight spells', 'Requires attunement'],
+    'Properties': ["Adds +2 to attack and damage rolls while wielder is under the effects of Moonbeam or Daylight spells", "Requires attunement"],
     'Weight': '6 lb',
     'Description': "Forged from lunar metal and imbued with celestial magic, this greatsword gleams like a silver crescent moon, its edge sharp enough to cut through the darkest shadows.",
     'Quote': "With each swing, it sings a melody of light that pierces the veil of darkness, a beacon of hope and justice.",
