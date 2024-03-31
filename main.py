@@ -137,35 +137,36 @@ with gr.Blocks() as demo:
             <h2><b>First:</b> Build a Card Template</h2>
                 </div>""")
     with gr.Row():
+        with gr.Column():
 
-    # Template Gallery instructions
-        gr.HTML(""" <div id="inner"> <header>
-                <h3>1. Click a border from the 'Card Template Gallery'</h3> 
-                </div>""")
-        
-    border_gallery = gr.Gallery(label = "Card Template Gallery", 
-                                    scale = 2,
-                                    value = useri.index_image_paths("Drakosfire/CardGenerator", "seed_images/card_templates"),
-                                    show_label = True,
-                                    columns = [3], rows = [3],
-                                    object_fit = "contain",
-                                    height = "auto",
-                                    elem_id = "Template Gallery")
-    
-    gr.HTML(""" <div id="inner"> <header>
-                <h3>2. Click a image from the Seed Image Gallery</h3><br>
-                </div>""")
-    
-    border_gallery.select(assign_img_path, outputs = selected_border_image)
-    seed_image_gallery = gr.Gallery(label= " Image Seed Gallery",
-                                    scale = 2,
-                                    value = useri.index_image_paths("Drakosfire/CardGenerator", "seed_images/item_seeds"),
-                                    show_label = True,
-                                    columns = [3], rows = [3],
-                                    object_fit = "contain",
-                                    height = "auto",
-                                    elem_id = "Template Gallery",
-                                    interactive=True)                 
+        # Template Gallery instructions
+            gr.HTML(""" <div id="inner"> <header>
+                    <h3>1. Click a border from the 'Card Template Gallery'</h3> 
+                    </div>""")
+            
+            border_gallery = gr.Gallery(label = "Card Template Gallery", 
+                                            scale = 2,
+                                            value = useri.index_image_paths("Drakosfire/CardGenerator", "seed_images/card_templates"),
+                                            show_label = True,
+                                            columns = [3], rows = [3],
+                                            object_fit = "contain",
+                                            height = "auto",
+                                            elem_id = "Template Gallery")
+        with gr.Column():
+            gr.HTML(""" <div id="inner"> <header>
+                        <h3>2. Click a image from the Seed Image Gallery</h3><br>
+                        </div>""")
+            
+            border_gallery.select(assign_img_path, outputs = selected_border_image)
+            seed_image_gallery = gr.Gallery(label= " Image Seed Gallery",
+                                            scale = 2,
+                                            value = useri.index_image_paths("Drakosfire/CardGenerator", "seed_images/item_seeds"),
+                                            show_label = True,
+                                            columns = [3], rows = [3],
+                                            object_fit = "contain",
+                                            height = "auto",
+                                            elem_id = "Template Gallery",
+                                            interactive=True)                 
 
     gr.HTML(""" <div id="inner"> <header><h4> -Or- Upload your own seed image, by dropping it into the 'Generated Template Gallery' </h4><br>
                 <h3>3. Click 'Generate Card Template'</h3><br>
