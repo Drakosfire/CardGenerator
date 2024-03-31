@@ -11,7 +11,8 @@ RUN apt-get update && \
     pip install diffusers && \
     pip install accelerate && \
     pip install transformers && \
-    pip install peft
+    pip install peft && \
+    pip install pip install PyGithub
 
 FROM base-layer as final-layer
 
