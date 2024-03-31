@@ -6,10 +6,6 @@ import ctypes
 import user_input as useri
 import gradio as gr
 import template_builder as tb
-import threading
-import time
-
-
 
 # This is a fix for the way that python doesn't release system memory back to the OS and it was leading to locking up the system
 libc = ctypes.cdll.LoadLibrary("libc.so.6")
@@ -18,10 +14,6 @@ M_MMAP_THRESHOLD = -3
 # Set malloc mmap threshold.
 libc.mallopt(M_MMAP_THRESHOLD, 2**20)
 initial_name = "A Crowbar"
-
-
-    
-
 
 with gr.Blocks() as demo:
     
@@ -62,21 +54,11 @@ with gr.Blocks() as demo:
     def set_textbox_defaults(textbox_default_dict, key):
         item_name = textbox_default_dict[key]
         return item_name
-    
-    
-                
+
     # Function called when user generates item info, then assign values of dictionary to variables, output once to State, twice to textbox
-    def generate_text_update_textboxes(user_input, progress = gr.Progress()):
+    def generate_text_update_textboxes(user_input):
         u.reclaim_mem()
-        
-        # Define a function to update progress
-        def update_progress(duration, progress):
-            for i in range(10):
-                time.sleep(duration / 10)  # Wait for a fraction of the total duration
-                progress((i + 1) / 10, desc="Thinking...")  # Update progress
-       # Start the progress update in a separate thread, passing `progress` explicitly
-        threading.Thread(target=update_progress, args=(10, progress)).start()
-        
+
         llm_output=useri.call_llm(user_input)
         item_key = list(llm_output.keys())
         
@@ -90,11 +72,12 @@ with gr.Blocks() as demo:
         if 'Damage' in item_key_values: 
             item_damage = llm_output[item_key[0]]['Damage']
         else: item_damage = ''
+
         item_weight = llm_output[item_key[0]]['Weight']
         item_description = llm_output[item_key[0]]['Description']
-        item_quote = llm_output[item_key[0]]['Quote']    
-
+        item_quote = llm_output[item_key[0]]['Quote']
         sd_prompt = llm_output[item_key[0]]['SD Prompt']
+
         return [item_name, item_name,
                 item_type, item_type,
                 item_rarity, item_rarity,
@@ -142,14 +125,14 @@ with gr.Blocks() as demo:
         return image_list, image_list
    
 
-    # Beginning of page format
-    # Title
+    # Beginning of UI Page
     gr.HTML(""" <div id="inner"> <header>
             <h1>Item Card Generator</h1>
             <p>
             With this AI driven tool you will build a collectible style card of a fantasy flavored item with details.
             </p>
             </div>""")
+    
     gr.HTML(""" <div id="inner"> <header>
             <h2><b>First:</b> Build a Card Template</h2>
                 </div>""")
@@ -162,32 +145,31 @@ with gr.Blocks() as demo:
         
     border_gallery = gr.Gallery(label = "Card Template Gallery", 
                                     scale = 2,
-                                    value = useri.index_image_paths("./seed_images/card_templates/", "card_templates/"),
+                                    value = useri.index_image_paths("Drakosfire/CardGenerator", "seed_images/card_templates"),
                                     show_label = True,
                                     columns = [3], rows = [3],
                                     object_fit = "contain",
                                     height = "auto",
                                     elem_id = "Template Gallery")
+    
     gr.HTML(""" <div id="inner"> <header>
                 <h3>2. Click a image from the Seed Image Gallery</h3><br>
                 </div>""")
+    
     border_gallery.select(assign_img_path, outputs = selected_border_image)
-
     seed_image_gallery = gr.Gallery(label= " Image Seed Gallery",
                                     scale = 2,
-                                    value = useri.index_image_paths("./seed_images/item_seeds/","item_seeds/"),
+                                    value = useri.index_image_paths("Drakosfire/CardGenerator", "seed_images/item_seeds"),
                                     show_label = True,
                                     columns = [3], rows = [3],
                                     object_fit = "contain",
                                     height = "auto",
                                     elem_id = "Template Gallery",
-                                    interactive=True) 
-                
+                                    interactive=True)                 
 
     gr.HTML(""" <div id="inner"> <header><h4> -Or- Upload your own seed image, by dropping it into the 'Generated Template Gallery' </h4><br>
                 <h3>3. Click 'Generate Card Template'</h3><br>
             </div>""")
-
     
     built_template_gallery = gr.Gallery(label= "Generated Template Gallery",
                                         scale = 1,
@@ -201,7 +183,6 @@ with gr.Blocks() as demo:
     
     seed_image_gallery.select(assign_img_path, outputs = selected_seed_image)
     built_template_gallery.upload(u.receive_upload, inputs=built_template_gallery, outputs= selected_seed_image)
-
     build_card_template_button = gr.Button(value = "Generate Card Template")
     build_card_template_button.click(build_template, inputs = [selected_border_image, selected_seed_image], outputs = [built_template_gallery, built_template]) 
         
@@ -212,8 +193,6 @@ with gr.Blocks() as demo:
                         <h3>1. Use a few words to describe the item then click 'Generate Text' </h3>
                         </div>""")
     with gr.Row():
-        
-        
         user_input =  gr.Textbox(label = 'Item', lines =1, placeholder= "Flaming Magical Sword", elem_id= "Item", scale =4)
         item_text_generate = gr.Button(value = "Generate item text", scale=1)
 
@@ -221,12 +200,9 @@ with gr.Blocks() as demo:
                 <h3> 2. Review and Edit the text</h3>
                 </div>""") 
     with gr.Row():
-    # Build text boxes for the broken up item dictionary values
-         
+
+    # Build text boxes for the broken up item dictionary values         
         with gr.Column(scale = 1):
-    
-    
-            
             item_name_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Name'),label = 'Name', lines = 1, interactive=True, elem_id='Item Name')
             item_type_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Type'),label = 'Type', lines = 1, interactive=True, elem_id='Item Type')
             item_rarity_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Rarity'),label = 'Rarity : [Common, Uncommon, Rare, Very Rare, Legendary]', lines = 1, interactive=True, elem_id='Item Rarity')
@@ -239,6 +215,7 @@ with gr.Blocks() as demo:
             item_description_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Description'),label = 'Description', lines = 1, interactive=True, elem_id='Item Description')
             item_quote_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Quote'),label = 'Quote', lines = 1, interactive=True, elem_id='Item quote')
     item_properties_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Properties'),label = 'Properties : [List of comma seperated values]', lines = 1, interactive=True, elem_id='Item Properties')
+    
     gr.HTML(""" <div id="inner"> <header>
                 <h3> 3. This text will be used to generate the card's image.</h3>
                 </div>""") 
@@ -267,7 +244,6 @@ with gr.Blocks() as demo:
                                     )
         generate_final_item_card = gr.Button(value = "Add Text", elem_id = "Generate user card")
     
-      
     card_gen_button.click(fn = generate_image_update_gallery, inputs =[num_image_to_generate,item_sd_prompt_output,item_name_output,built_template], outputs= generate_gallery)
     generate_gallery.select(assign_img_path, outputs = selected_generated_image)
 
@@ -295,8 +271,6 @@ with gr.Blocks() as demo:
                                                         item_sd_prompt_var,
                                                         item_sd_prompt_output])          
         
-       
-   
     generate_final_item_card.click(card.render_text_on_card, inputs = [selected_generated_image,
                                                                         item_name_output, 
                                                                         item_type_output, 
@@ -310,8 +284,6 @@ with gr.Blocks() as demo:
                                                                         ], 
                                                                         outputs = generate_gallery )
     
-
-
 if __name__ == '__main__':
     demo.launch(server_name = "0.0.0.0", server_port = 8000, share = False, allowed_paths = ["/media/drakosfire/Shared/","/media/drakosfire/Shared/MerchantBot/card_templates"])
         

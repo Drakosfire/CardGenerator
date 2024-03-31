@@ -5,21 +5,25 @@ import utilities as u
 import sys
 import tempfile
 from PIL import Image
+from github import Github
 
 image_path = str
 end_phrase = """<|end_of_turn|>"""
 # Indexing the contents of Card templates and temp images
 card_template_path = "./card_templates/"
 temp_image_path = "./image_temp"
-def index_image_paths(directory_path, github_path):
-    list_temp_files = []
-    list_of_image_paths = u.directory_contents(directory_path)
-    for image_path in list_of_image_paths:
-        image_path = f"https://raw.githubusercontent.com/Drakosfire/CardGenerator/alpha-templates/seed_images/{github_path}{image_path}"
-        print(image_path)
-        list_temp_files.append(image_path)
-    return list_temp_files
 
+def index_image_paths(repo_name,directory_path):
+    g = Github()  # No token needed for public repos
+    repo = g.get_repo(repo_name)
+    contents = repo.get_contents(directory_path)
+
+    files = []
+    for content_file in contents:
+        if content_file.type == "file":
+            files.append(content_file.download_url)  # Or content_file.path for just the path
+    
+    return files
 
 user_pick_template_prompt = "Pick a template number from this list : "
 user_pick_image_prompt = "Select an image : "
@@ -76,6 +80,7 @@ def prompt_user_input():
             mimic = True
 
         #user_input_template = input(f"Pick a template number from this list : {process_list_for_user_response(list_of_card_templates)}")
+        
         user_input_template = user_pick_item(user_pick_template_prompt,list_of_card_templates)
         response = call_llm(user_input_item)        
         print(response[u.keys_list(response,0)])
