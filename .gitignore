@@ -3,4 +3,8 @@ image_temp/
 MerchantBotCLI/
 seed_images
 models/starling-lm-7b-alpha.Q8_0.gguf
+models/stable-diffusion/Loras/EnvyMimicXL01.safetensors
+models/stable-diffusion/Loras/add-detail-xl.safetensors
+models/stable-diffusion/Loras/blank-card-template-5.safetensors
+models/stable-diffusion/card-generator-v1.safetensors
 
