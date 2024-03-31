@@ -19,3 +19,15 @@ license: mit
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
 >>>>>>> f6d0508 (initial commit)
+
+---
+title: CollectibleCardGenerator
+emoji: 🐠
+colorFrom: green
+colorTo: yellow
+sdk: docker
+pinned: false
+license: mit
+---
+
+Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
