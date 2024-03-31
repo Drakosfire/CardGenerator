@@ -17,11 +17,7 @@ FROM base-layer as final-layer
 
 RUN useradd -m -u 1000 user 
    
-    # mkdir -p /home/user/.cache && \  
-    # chmod 777 /home/user/.cache && \  
-    # chown -R user:user /home/user/app/ 
 # Set environment variables for copied builds of cuda and flash-attn in /venv
-
 
 ENV PATH=/usr/local/cuda-12.4/bin:/venv/bin:${PATH}
 ENV LD_LIBRARY_PATH=/usr/local/cuda-12.4/lib64:${LD_LIBRARY_PATH}
@@ -29,8 +25,11 @@ ENV LD_LIBRARY_PATH=/usr/local/cuda-12.4/lib64:${LD_LIBRARY_PATH}
 ENV VIRTUAL_ENV=/venv
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-# Set working directory and user
+
+# Copy local files to working directory and activate user
+COPY . /home/user/app/
 WORKDIR /home/user/app
+
 
 USER user
     
