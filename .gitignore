@@ -2,3 +2,5 @@ output/
 image_temp/
 MerchantBotCLI/
 seed_images
+models/starling-lm-7b-alpha.Q8_0.gguf
+
