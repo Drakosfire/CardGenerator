@@ -37,4 +37,4 @@ saved_model/**/* filter=lfs diff=lfs merge=lfs -text
 =======
 *.png filter=lfs diff=lfs merge=lfs -text
 >>>>>>> master
-*.gguf filter=lfs diff=lfs merge=lfs -text
+models/starling-lm-7b-alpha.Q8_0.gguf filter=lfs diff=lfs merge=lfs -text
