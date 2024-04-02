@@ -9,11 +9,11 @@ from PIL import Image
 pipe = None
 start_time = time.time()
 torch.backends.cuda.matmul.allow_tf32 = True
-model_path = ("models/stable-diffusion/card-generator-v1.safetensors")
-lora_path = "models/stable-diffusion/Loras/blank-card-template-5.safetensors"
-detail_lora_path = "models/stable-diffusion/Loras/add-detail-xl.safetensors"
-mimic_lora_path = "models/stable-diffusion/Loras/EnvyMimicXL01.safetensors"
-temp_image_path = "image_temp/"
+model_path = ("/home/user/app/models/stable-diffusion/card-generator-v1.safetensors")
+lora_path = "/home/user/app/models/stable-diffusion/Loras/blank-card-template-5.safetensors"
+detail_lora_path = "/home/user/app/models/stable-diffusion/Loras/add-detail-xl.safetensors"
+mimic_lora_path = "/home/user/app/models/stable-diffusion/Loras/EnvyMimicXL01.safetensors"
+temp_image_path = "/home/user/app/image_temp/"
 card_pre_prompt = " blank magic card,high resolution, detailed intricate high quality border, textbox, high quality detailed magnum opus drawing of a "
 negative_prompts = "text, words, numbers, letters"
 image_list = []
