@@ -4,10 +4,7 @@ import gc
 import torch
 
 model_path = "/home/user/app/models/starling-lm-7b-alpha.Q8_0.gguf"
-# Set gpu_layers to the number of layers to offload to GPU. Set to 0 if no GPU acceleration is available on your system.
 
-
-# Simple inference example
 def load_llm(user_input):
   llm = Llama(
   model_path=model_path,
