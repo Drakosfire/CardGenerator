@@ -64,6 +64,7 @@ def call_llm(user_input):
         response = response
     
     response = response.replace("GPT4 Assistant: ", "")
+    print(response)
     response = igen.convert_to_dict(response)
     if not response:
         response = call_llm(user_input)
