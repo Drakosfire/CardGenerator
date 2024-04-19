@@ -8,4 +8,4 @@ models/stable-diffusion/Loras/add-detail-xl.safetensors
 models/stable-diffusion/Loras/blank-card-template-5.safetensors
 models/stable-diffusion/card-generator-v1.safetensors
 cuda_12.4.0_550.54.14_linux.run
-models
+models/
