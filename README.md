@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 <<<<<<< HEAD
 license: mit
@@ -31,3 +32,7 @@ license: mit
 ---
 
 Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+=======
+# CardGenerator
+Takes user input and generates a collectible card with custom or LLM generated text and image generation
+>>>>>>> 9a956dd (Polished and launch to Hugging Face)

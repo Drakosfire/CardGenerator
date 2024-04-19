@@ -1,6 +1,6 @@
 output/
 image_temp/
-MerchantBotCLI/
 models
 seed_images/
 cuda_12.4.0_550.54.14_linux.run
+
