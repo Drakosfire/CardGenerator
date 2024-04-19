@@ -6,13 +6,6 @@ import ctypes
 import user_input as useri
 import gradio as gr
 import template_builder as tb
-<<<<<<< HEAD
-=======
-import threading
-import time
-
-
->>>>>>> 9a956dd (Polished and launch to Hugging Face)
 
 # This is a fix for the way that python doesn't release system memory back to the OS and it was leading to locking up the system
 libc = ctypes.cdll.LoadLibrary("libc.so.6")
@@ -22,13 +15,6 @@ M_MMAP_THRESHOLD = -3
 libc.mallopt(M_MMAP_THRESHOLD, 2**20)
 initial_name = "A Crowbar"
 
-<<<<<<< HEAD
-=======
-
-    
-
-
->>>>>>> 9a956dd (Polished and launch to Hugging Face)
 with gr.Blocks() as demo:
     
     # Functions and State Variables
@@ -73,27 +59,8 @@ with gr.Blocks() as demo:
 
     # Function called when user generates item info, then assign values of dictionary to variables, output once to State, twice to textbox
     def generate_text_update_textboxes(user_input):
-    def generate_text_update_textboxes(user_input):
         u.reclaim_mem()
 
-
-=======
-    
-    
-                
-    # Function called when user generates item info, then assign values of dictionary to variables, output once to State, twice to textbox
-    def generate_text_update_textboxes(user_input, progress = gr.Progress()):
-        u.reclaim_mem()
-        
-        # Define a function to update progress
-        def update_progress(duration, progress):
-            for i in range(10):
-                time.sleep(duration / 10)  # Wait for a fraction of the total duration
-                progress((i + 1) / 10, desc="Thinking...")  # Update progress
-       # Start the progress update in a separate thread, passing `progress` explicitly
-        threading.Thread(target=update_progress, args=(10, progress)).start()
-        
->>>>>>> 9a956dd (Polished and launch to Hugging Face)
         llm_output=useri.call_llm(user_input)
         item_key = list(llm_output.keys())
         
@@ -159,11 +126,8 @@ with gr.Blocks() as demo:
             preview = img2img.preview_and_generate_image(x,img_gen, prompt, built_template, item_name)
             image_list.append(preview)
             yield image_list
-            #generate_gallery.change(image_list)
         del preview
         u.reclaim_mem()
-
-        #generated_image_list = img2img.generate_image(num_img,sd_prompt,item_name,selected_border)
         return image_list
     
     def build_template(selected_border, selected_seed_image):
@@ -171,21 +135,13 @@ with gr.Blocks() as demo:
         return image_list, image_list
    
 
-<<<<<<< HEAD
     # Beginning of UI Page
-    # Beginning of UI Page
-=======
-    # Beginning of page format
-    # Title
->>>>>>> 9a956dd (Polished and launch to Hugging Face)
     gr.HTML(""" <div id="inner"> <header>
             <h1>Item Card Generator</h1>
             <p>
             With this AI driven tool you will build a collectible style card of a fantasy flavored item with details.
             </p>
             </div>""")
-<<<<<<< HEAD
-    
     
 =======
 >>>>>>> 9a956dd (Polished and launch to Hugging Face)
