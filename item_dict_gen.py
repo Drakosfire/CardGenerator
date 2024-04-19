@@ -4,17 +4,32 @@ import gc
 import torch
 
 model_path = "./models/starling-lm-7b-alpha.Q8_0.gguf"
+<<<<<<< HEAD
 
+=======
+# Set gpu_layers to the number of layers to offload to GPU. Set to 0 if no GPU acceleration is available on your system.
+
+
+# Simple inference example
+>>>>>>> 9a956dd (Polished and launch to Hugging Face)
 def load_llm(user_input):
   llm = Llama(
   model_path=model_path,
   n_ctx=8192,  # The max sequence length to use - note that longer sequence lengths require much more resources
   n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
+<<<<<<< HEAD
   n_gpu_layers=32 # The number of layers to offload to GPU, if you have GPU acceleration available
   )
   return llm(
   f"GPT4 User: {prompt_instructions}  the item is {user_input}: <|end_of_turn|>GPT4 Assistant:", # Prompt
   max_tokens=768,  # Generate up to 512 tokens
+=======
+  n_gpu_layers=-1         # The number of layers to offload to GPU, if you have GPU acceleration available
+)
+  return llm(
+  f"GPT4 User: {prompt_instructions}  the item is {user_input}: <|end_of_turn|>GPT4 Assistant:", # Prompt
+  max_tokens=512,  # Generate up to 512 tokens
+>>>>>>> 9a956dd (Polished and launch to Hugging Face)
   stop=["</s>"],   # Example stop token - not necessarily correct for this specific model! Please check before using.
   echo=False        # Whether to echo the prompt
   )
