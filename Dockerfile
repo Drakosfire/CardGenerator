@@ -159,3 +159,5 @@ USER user
 EXPOSE 8000
 
 ENTRYPOINT ["python", "main.py"]
+
+<lora:CyborgsXL:..3> <lora:RBTS_STYLE:.2> <lora:ral-fluff:1.3> <lora:zhibi:.5>
