@@ -23,11 +23,7 @@ test_item = {'Name': 'Pustulent Raspberry', 'Type': 'Fruit', 'Value': '1 cp', 'P
 # Function that takes in an image url and a dictionary and uses the values to print onto a card.
 def paste_image_and_resize(base_image,sticker_path, x_position, y_position,img_width, img_height, purchased_item_key = None):
     
-<<<<<<< HEAD
     # Check for if item has a Rarity string that is in the dictionary of sticker paths
-=======
-    # Check for if item has a Rarity string that is a in the dictionary of sticket paths
->>>>>>> 9a956dd (Polished and launch to Hugging Face)
     if purchased_item_key:
         if sticker_path[purchased_item_key]:
             sticker_path = sticker_path[purchased_item_key]
