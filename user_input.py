@@ -21,7 +21,8 @@ def index_image_paths(repo_name,directory_path):
     files = []
     for content_file in contents:
         if content_file.type == "file":
-            files.append(content_file.download_url)  # Or content_file.path for just the path
+            media_url = content_file.download_url.replace("raw.githubusercontent.com", "media.githubusercontent.com/media")
+            files.append(media_url)  # Or content_file.path for just the path
     
     return files
 
