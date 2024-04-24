@@ -112,6 +112,7 @@ with gr.Blocks() as demo:
     # Called when pressing button to generate image, updates gallery by returning the list of image URLs
     def generate_image_update_gallery(num_img, sd_prompt,item_name, built_template):
         delete_temp_images()
+        print(f"sd_prompt is a {type(sd_prompt)}")
         image_list = []
         image_generator = img_generator()
         img_gen, prompt = image_generator.load_img_gen(sd_prompt, item_name)

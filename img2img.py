@@ -12,13 +12,16 @@ torch.backends.cuda.matmul.allow_tf32 = True
 model_path = "/media/drakosfire/Shared/models/stable-diffusion/card-generator-v1/card-generator-v1.safetensors"
 lora_path = "/media/drakosfire/Shared/models/stable-diffusion/card-generator-v1/blank-card-template-5.safetensors"
 detail_lora_path = "/media/drakosfire/Shared/models/stable-diffusion/card-generator-v1/add-detail-xl.safetensors"
+mimic_lora_path = :"/media/drakosfire/Shared/CardGenerator/models/stable-diffusion/Loras/EnvyMimicXL01.safetensors"
 temp_image_path = "./image_temp/"
 card_pre_prompt = " blank magic card,high resolution, detailed intricate high quality border, textbox, high quality detailed magnum opus drawing of a "
 negative_prompts = "text, words, numbers, letters"
 image_list = []
 
-class img_generator(): 
-    def load_img_gen(prompt, item, mimic = None):
+class img_generator():
+
+    def load_img_gen(self,prompt, item, mimic = None):
+        print(f"Input Prompt = {prompt} + Item : {item}")
         prompt = card_pre_prompt + item + ' ' + prompt
         print(prompt)
         
@@ -41,7 +44,7 @@ class img_generator():
         pipe.enable_vae_slicing()
         return pipe, prompt
 
-    def preview_and_generate_image(x,pipe, prompt, user_input_template, item):    
+    def preview_and_generate_image(self,x,pipe, prompt, user_input_template, item):    
         img_start = time.time()   
         image = pipe(prompt=prompt,
                     strength = .9,
