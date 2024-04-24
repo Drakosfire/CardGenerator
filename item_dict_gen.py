@@ -1,27 +1,25 @@
-from llama_cpp import Llama
+import replicate
 import ast
 import gc
 import torch
+import os
 
-model_path = "./models/starling-lm-7b-alpha.Q8_0.gguf"
+api_key = os.getenv('REPLICATE_API_TOKEN')
+
+
+model_path = "meta/meta-llama-3-70b-instruct"
 def load_llm(user_input):
-  llm = Llama(
-  model_path=model_path,
-  n_ctx=8192,  # The max sequence length to use - note that longer sequence lengths require much more resources
-  n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
-  n_gpu_layers=32 # The number of layers to offload to GPU, if you have GPU acceleration available
-  )
-  return llm(
-  f"GPT4 User: {prompt_instructions}  the item is {user_input}: <|end_of_turn|>GPT4 Assistant:", # Prompt
-  max_tokens=768,  # Generate up to 512 tokens
-  stop=["</s>"],   # Example stop token - not necessarily correct for this specific model! Please check before using.
-  echo=False        # Whether to echo the prompt
-  )
+  input = {"prompt" : f" {prompt_instructions} the item is {user_input}"}
+  output = replicate.run(model_path,
+    input=input
+    )
+  return output
+  
 
 def call_llm_and_cleanup(user_input):
     # Call the LLM and store its output
-    llm_output = load_llm(user_input)
-    print(llm_output['choices'][0]['text'])
+    llm_output = "".join(load_llm(user_input))
+    print("".join(llm_output))
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()  # Clear VRAM allocated by PyTorch
@@ -55,11 +53,24 @@ def convert_to_dict(string):
 
 # Instructions past 4 are not time tested and may need to be removed.
 ### Meta prompted : 
-prompt_instructions = """ **Purpose**: Generate a structured inventory entry for a specific item as a hashmap. Follow the format provided in the examples below.
+prompt_instructions = """ **Purpose**: ONLY Generate a structured inventory entry for a specific item as a hashmap. Do NOT reply with anything other than a hashmap.
 
 **Instructions**:
 1. Replace `{item}` with the name of the user item, DO NOT CHANGE THE USER ITEM NAME enclosed in single quotes (e.g., `'Magic Wand'`).
-2. Ensure your request is formatted as a hashmap. 
+2. **Dictionary Structure**:
+    
+    {"{item}": {
+    'Name': "{item name}",
+    'Type': '{item type}',
+    'Rarity': '{item rarity},
+    'Value': '{item value}',
+    'Properties': ["{property1}", "{property2}", ...],
+    'Damage': '{damage formula} , '{damage type}',
+    'Weight': '{weight}',
+    'Description': "{item description}",
+    'Quote': "{item quote}",
+    'SD Prompt': "{special description for the item}"
+    } } 
 3. Weapons MUST have a key 'Damage' 
 4. The description should be brief and puncy, or concise and thoughtful.
 5. The quote and SD Prompt MUST be inside double quotations ie " ".
@@ -111,22 +122,6 @@ Imitative Predators. Mimics can alter their outward texture to resemble wood, st
 When it changes shape, a mimic excretes an adhesive that helps it seize prey and weapons that touch it. The adhesive is absorbed when the mimic assumes its amorphous form and on parts the mimic uses to move itself.
 Cunning Hunters. Mimics live and hunt alone, though they occasionally share their feeding grounds with other creatures. Although most mimics have only predatory intelligence, a rare few evolve greater cunning and the ability to carry on simple conversations in Common or Undercommon. Such mimics might allow safe passage through their domains or provide useful information in exchange for food.
 
-11. 
-**Format Example**:
-- **Dictionary Structure**:
-    
-    {"{item}": {
-    'Name': "{item name}",
-    'Type': '{item type}',
-    'Rarity': '{item rarity},
-    'Value': '{item value}',
-    'Properties': ["{property1}", "{property2}", ...],
-    'Damage': '{damage formula} , '{damage type}',
-    'Weight': '{weight}',
-    'Description': "{item description}",
-    'Quote': "{item quote}",
-    'SD Prompt': "{special description for the item}"
-    } }
     
 - **Input Placeholder**:
     - "{item}": Replace with the item name, ensuring it's wrapped in single quotes.

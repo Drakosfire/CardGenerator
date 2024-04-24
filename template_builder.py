@@ -40,8 +40,6 @@ def paste_image_and_resize(base_image,sticker, x_position, y_position,img_width,
     return base_image
 
 def build_card_template(selected_border, selected_seed_image):
-    print(selected_seed_image)
-    print(type(selected_seed_image))
     selected_border = u.open_image_from_url(selected_border)
     if type(selected_seed_image) == str:      
         print(f"String : {selected_seed_image}")      
@@ -65,6 +63,8 @@ def build_card_template(selected_border, selected_seed_image):
     canvas = paste_image_and_resize(canvas, selected_seed_image,seed_x,seed_y, seed_width, seed_height)
     
     canvas.paste(selected_border,(0,0), mask = mask)
+    print(f"Canvas is : {canvas}")
+    print(f"Canvas is : {type(canvas)}")
 
     image_list.append(canvas)
 

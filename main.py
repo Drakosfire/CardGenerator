@@ -1,5 +1,6 @@
+import img2img
+from img2img import img_generator
 
-import img2img 
 import card_generator as card
 import utilities as u
 import ctypes
@@ -111,11 +112,11 @@ with gr.Blocks() as demo:
     # Called when pressing button to generate image, updates gallery by returning the list of image URLs
     def generate_image_update_gallery(num_img, sd_prompt,item_name, built_template):
         delete_temp_images()
-        print(type(built_template))
         image_list = []
-        img_gen, prompt = img2img.load_img_gen(sd_prompt, item_name)
+        image_generator = img_generator()
+        img_gen, prompt = image_generator.load_img_gen(sd_prompt, item_name)
         for x in range(num_img):
-            preview = img2img.preview_and_generate_image(x,img_gen, prompt, built_template, item_name)
+            preview = image_generator.preview_and_generate_image(x,img_gen, prompt, built_template, item_name)
             image_list.append(preview)
             yield image_list
             #generate_gallery.change(image_list)
