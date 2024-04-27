@@ -299,6 +299,7 @@ with gr.Blocks() as demo:
                                                                         ], 
                                                                         outputs = generate_gallery )
     base_dir = os.path.dirname(os.path.abspath(__file__))  # Gets the directory where the script is located
+    print(f"Base Directory :",base_dir)
     list_of_static_dir = [os.path.join(base_dir, "card_parts"), 
                         os.path.join(base_dir, "fonts"), 
                         os.path.join(base_dir, "image_temp")]

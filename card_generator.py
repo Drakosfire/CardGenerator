@@ -18,6 +18,8 @@ blank_overlay_path = "./card_parts/white-fill-title-detail-value-transparent.png
 value_overlay_path = "./card_parts/Value_box_transparent.png"
 test_item = {'Name': 'Pustulent Raspberry', 'Type': 'Fruit', 'Value': '1 cp', 'Properties': ['Unusual Appearance', 'Rare Taste'], 'Weight': '0.2 lb', 'Description': 'This small fruit has a pustulent appearance, with bumps and irregular shapes covering its surface. Its vibrant colors and strange texture make it an oddity among other fruits.', 'Quote': 'A fruit that defies expectations, as sweet and sour as life itself.', 'SD Prompt': 'A small fruit with vibrant colors and irregular shapes, bumps covering its surface.'}
 
+import os
+print(f"path to value box transparent{os.path.exists('/home/user/app/card_parts/Value_box_transparent.png')}")  # Should return True
 
 
 # Function that takes in an image url and a dictionary and uses the values to print onto a card.
