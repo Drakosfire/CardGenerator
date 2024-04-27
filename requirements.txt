@@ -1,5 +1,5 @@
 torch
-
+replicate
 PyGithub
 pillow
 openai
