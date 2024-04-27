@@ -1,3 +1,14 @@
+---
+title: {{Drakosfire's Dungeons and Dragons Item Card Generator}}
+emoji: 🃏
+colorFrom: yellow
+colorTo: purple
+sdk: gradio
+sdk_version: 4.26.0
+app_file: app.py
+pinned: false
+---
+
 # Drakosfire's Dungeons and Dragons Item Card Generator
 
 Welcome to the Drakosfire's Dungeons and Dragons Item Card Generator! This innovative tool harnesses the power of AI to generate unique item cards for your D&D adventures. 
