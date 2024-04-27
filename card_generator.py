@@ -13,11 +13,16 @@ def save_image(image,item_key):
 #shop_inventory = inv.inventory
 #purchased_item_key = shop_inventory['Shortsword']
 #border_path = './card_templates/Shining Sunset Border.png'
-
-sticker_path_dictionary = {'Default': './card_parts/Sizzek Sticker.png','Common': './card_parts/Common.png', 'Uncommon': './card_parts/Uncommon.png','Rare': './card_parts/Rare.png','Very Rare':'./card_parts/Very Rare.png','Legendary':'./card_parts/Legendary.png'}
-blank_overlay_path = "./card_parts/white-fill-title-detail-value-transparent.png"
-value_overlay_path = "./card_parts/Value_box_transparent.png"
+base_dir = os.path.dirname(os.path.abspath(__file__)) 
+value_overlay_path = os.path.join(base_dir, "card_parts/Value_box_transparent.png")
 test_item = {'Name': 'Pustulent Raspberry', 'Type': 'Fruit', 'Value': '1 cp', 'Properties': ['Unusual Appearance', 'Rare Taste'], 'Weight': '0.2 lb', 'Description': 'This small fruit has a pustulent appearance, with bumps and irregular shapes covering its surface. Its vibrant colors and strange texture make it an oddity among other fruits.', 'Quote': 'A fruit that defies expectations, as sweet and sour as life itself.', 'SD Prompt': 'A small fruit with vibrant colors and irregular shapes, bumps covering its surface.'}
+sticker_path_dictionary = {'Default': os.path.join(base_dir, "card_parts/Sizzek Sticker.png"),
+                            'Common': os.path.join(base_dir, "card_parts/card_parts/Common.png"),
+                            'Uncommon': os.path.join(base_dir, "card_parts/card_parts/Uncommon.png"),
+                            'Rare': os.path.join(base_dir, "card_parts/Rare.png"),
+                            'Very Rare':os.path.join(base_dir, "card_parts/card_parts/card_parts/Very Rare.png"),
+                            'Legendary':os.path.join(base_dir, "card_parts/Legendary.png")}
+
 
 def print_directory_structure(startpath):
     for root, dirs, files in os.walk(startpath):
