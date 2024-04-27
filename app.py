@@ -235,7 +235,7 @@ with gr.Blocks() as demo:
     item_sd_prompt_output = gr.Textbox(label = 'Putting words or phrases in parenthesis adds weight. Example: (Flaming Magical :1.0) Sword.', value = set_textbox_defaults(textbox_default_dict, 'SD Prompt'), lines = 1, interactive=True, elem_id='SD Prompt')
          
     gr.HTML(""" <div id="inner"> <header>
-                <h2> <b>Third:</b> Click 'Generate Cards' to generate 4 cards to choose from. </h2>
+                <h2> <b>Third:</b> Click 'Generate Cards' to generate 4 cards to choose from. First image from a cold boot takes about 2 minutes. After that it's 10 seconds per image. </h2>
                 </div>""")          
     card_gen_button = gr.Button(value = "Generate Cards", elem_id="Generate Card Button")
            
@@ -253,12 +253,16 @@ with gr.Blocks() as demo:
                                     columns =[2], rows = [2],
                                     object_fit= "fill",
                                     height = "768",
-                                    elem_id = "Generated Cards Gallery"
+                                    elem_id = "Generated Cards Gallery",
+                                    allow_preview=False
                                     )
         generate_final_item_card = gr.Button(value = "Add Text", elem_id = "Generate user card")
     
     
-    card_gen_button.click(fn = generate_image_update_gallery, inputs =[num_image_to_generate,item_sd_prompt_output,item_name_output,built_template_gallery], outputs= generate_gallery)
+    card_gen_button.click(fn = generate_image_update_gallery,
+                           inputs =[num_image_to_generate,item_sd_prompt_output,item_name_output,
+                                    built_template_gallery], outputs= generate_gallery,
+                                    show_progress=True)
     generate_gallery.select(assign_img_path, outputs = selected_generated_image)
 
         # Button logice calls function when button object is pressed, passing inputs and passing output to components
