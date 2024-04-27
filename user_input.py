@@ -83,7 +83,7 @@ def prompt_user_input():
 
         #user_input_template = input(f"Pick a template number from this list : {process_list_for_user_response(list_of_card_templates)}")
         
-        user_input_template = user_pick_item(user_pick_template_prompt,list_of_card_templates)
+        user_input_template = user_pick_item(user_pick_template_prompt)
         response = call_llm(user_input_item)        
         print(response[u.keys_list(response,0)])
         output_dict = response[u.keys_list(response,0)]
