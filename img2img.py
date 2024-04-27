@@ -1,6 +1,3 @@
-from diffusers import (StableDiffusionXLImg2ImgPipeline, AutoencoderKL)                   
-from diffusers.utils import load_image
-import torch
 import time
 import utilities as u
 import card_generator as card
