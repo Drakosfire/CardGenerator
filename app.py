@@ -235,7 +235,7 @@ with gr.Blocks() as demo:
     item_sd_prompt_output = gr.Textbox(label = 'Putting words or phrases in parenthesis adds weight. Example: (Flaming Magical :1.0) Sword.', value = set_textbox_defaults(textbox_default_dict, 'SD Prompt'), lines = 1, interactive=True, elem_id='SD Prompt')
          
     gr.HTML(""" <div id="inner"> <header>
-                <h2> <b>Third:</b> Click 'Generate Cards' to generate 4 cards to choose from. First image from a cold boot takes about 2 minutes. After that it's 10 seconds per image. </h2>
+                <h2> <b>Third:</b> Click 'Generate Cards' to generate 4 cards to choose from. \n First image from a cold boot takes about 2 minutes. \n After that it's 10 seconds per image. </h2>
                 </div>""")          
     card_gen_button = gr.Button(value = "Generate Cards", elem_id="Generate Card Button")
            
