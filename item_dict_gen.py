@@ -1,7 +1,6 @@
 import replicate
 import ast
 import gc
-import torch
 import os
 
 api_key = os.getenv('REPLICATE_API_TOKEN')
@@ -21,9 +20,7 @@ def call_llm_and_cleanup(user_input):
     llm_output = "".join(load_llm(user_input))
     print("".join(llm_output))
     gc.collect()
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()  # Clear VRAM allocated by PyTorch
-    
+  
     # llm_output is still available for use here
     
     return llm_output
