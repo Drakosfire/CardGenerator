@@ -1,5 +1,5 @@
 ---
-title: {{Drakosfire's Dungeons and Dragons Item Card Generator}}
+title: Drakosfires Dungeons and Dragons Item Card Generator
 emoji: 🃏
 colorFrom: yellow
 colorTo: purple
