@@ -298,7 +298,7 @@ with gr.Blocks() as demo:
                                                                         item_quote_output
                                                                         ], 
                                                                         outputs = generate_gallery )
-    list_of_static_dir = ["./card_parts/", " ./fonts/", "./image_temp"]
+    list_of_static_dir = ["./card_parts", " ./fonts", "./image_temp"]
     gr.set_static_paths(paths=list_of_static_dir)
     
     
