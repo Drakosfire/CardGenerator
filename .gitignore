@@ -1,7 +1,6 @@
 output/
 image_temp/
 models
-seed_images/
 cuda_12.4.0_550.54.14_linux.run
 models/
 blobs-ids.txt
