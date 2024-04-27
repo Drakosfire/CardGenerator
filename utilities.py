@@ -1,12 +1,7 @@
-# Create a list of hashmap key values .
-import torch
-import time
-import gc
 from io import BytesIO
 import requests
 import os
 from PIL import Image
-from pathlib import Path
 
 image_list = []
 # Utility Functions to be called from all modules
@@ -15,20 +10,6 @@ image_list = []
 def keys_list(dict, index):
     keys_list=list(dict.keys())
     return keys_list[index]
-
-# Function to clear model from VRAM to make space for other model
-def reclaim_mem():
-    
-    print(f"Memory before del {torch.cuda.memory_allocated()}")
-    torch.cuda.ipc_collect()
-    gc.collect()
-    torch.cuda.empty_cache()
-    time.sleep(0.01)
-    print(f"Memory after del {torch.cuda.memory_allocated()}")
-
-#def del_object(object):
- #       del object
-  #      gc.collect()
 
 # Create a list of a directory if directory exists
 def directory_contents(directory_path):

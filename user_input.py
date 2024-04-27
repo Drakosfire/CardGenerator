@@ -3,8 +3,6 @@ import img2img
 import card_generator as card
 import utilities as u
 import sys
-import tempfile
-from PIL import Image
 from github import Github
 
 image_path = str
@@ -87,7 +85,6 @@ def prompt_user_input():
         response = call_llm(user_input_item)        
         print(response[u.keys_list(response,0)])
         output_dict = response[u.keys_list(response,0)]
-        u.reclaim_mem()
         item_name = response[u.keys_list(response,0)]['Name']
         sd_prompt = response[u.keys_list(response,0)]['SD Prompt']    
         image_path = img2img.generate_image(4,sd_prompt,item_name,user_input_template, mimic)

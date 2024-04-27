@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import ImageDraw, ImageFont
 
  # Function for managing longer bodies of text and breaking into a list of lines to be printed based on input arguments   
 def split_text_into_lines(text, font, max_width, draw):

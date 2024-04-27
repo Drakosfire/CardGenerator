@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 import utilities as u
 
 # Function to initialize image canvas

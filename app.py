@@ -6,12 +6,6 @@ import user_input as useri
 import gradio as gr
 import template_builder as tb
 
-# This is a fix for the way that python doesn't release system memory back to the OS and it was leading to locking up the system
-libc = ctypes.cdll.LoadLibrary("libc.so.6")
-M_MMAP_THRESHOLD = -3
-
-# Set malloc mmap threshold.
-libc.mallopt(M_MMAP_THRESHOLD, 2**20)
 initial_name = "A Crowbar"
 
 with gr.Blocks() as demo:
