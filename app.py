@@ -299,9 +299,8 @@ with gr.Blocks() as demo:
                                                                         outputs = generate_gallery )
     
     
-if __name__ == '__main__':
-    demo.launch(server_name = "0.0.0.0", server_port = 8000, share = False, allowed_paths = ["/media/drakosfire/Shared/","/media/drakosfire/Shared/MerchantBot/card_templates"])
-        
+if __name__ == "__main__":
+    demo.launch(server_name = "0.0.0.0", server_port = 8000, share = False, allowed_paths = []) 
 
 
 
