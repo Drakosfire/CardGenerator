@@ -2,6 +2,7 @@ import render_card_text as rend
 from PIL import Image, ImageFilter
 import utilities as u
 import ast
+import os
 
 
 def save_image(image,item_key):
@@ -18,9 +19,17 @@ blank_overlay_path = "./card_parts/white-fill-title-detail-value-transparent.png
 value_overlay_path = "./card_parts/Value_box_transparent.png"
 test_item = {'Name': 'Pustulent Raspberry', 'Type': 'Fruit', 'Value': '1 cp', 'Properties': ['Unusual Appearance', 'Rare Taste'], 'Weight': '0.2 lb', 'Description': 'This small fruit has a pustulent appearance, with bumps and irregular shapes covering its surface. Its vibrant colors and strange texture make it an oddity among other fruits.', 'Quote': 'A fruit that defies expectations, as sweet and sour as life itself.', 'SD Prompt': 'A small fruit with vibrant colors and irregular shapes, bumps covering its surface.'}
 
-import os
-print(f"path to value box transparent{os.path.exists('/home/user/app/card_parts/Value_box_transparent.png')}")  # Should return True
-
+def print_directory_structure(startpath):
+    for root, dirs, files in os.walk(startpath):
+        level = root.replace(startpath, '').count(os.sep)
+        indent = ' ' * 4 * (level)
+        print(f"{indent}{os.path.basename(root)}/")
+        subindent = ' ' * 4 * (level + 1)
+        for f in files:
+            print(f"{subindent}{f}")
+base_dir = os.path.dirname(os.path.abspath(__file__))
+print("Base Directory:", base_dir)
+print_directory_structure(base_dir)
 
 # Function that takes in an image url and a dictionary and uses the values to print onto a card.
 def paste_image_and_resize(base_image,sticker_path, x_position, y_position,img_width, img_height, purchased_item_key = None):
