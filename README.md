@@ -1,38 +1,31 @@
-<<<<<<< HEAD
----
-<<<<<<< HEAD
-license: mit
-title: Collectible Card Generator
-short_description: Use LLM and SD to make custom collectible cards
-app_file: main.py
-sdk: docker
-app_port: 8000
----
-=======
-title: CollectibleCardGenerator
-emoji: 🐠
-colorFrom: green
-colorTo: yellow
-sdk: docker
-pinned: false
-license: mit
----
+# Drakosfire's Dungeons and Dragons Item Card Generator
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
->>>>>>> f6d0508 (initial commit)
+Welcome to the Drakosfire's Dungeons and Dragons Item Card Generator! This innovative tool harnesses the power of AI to generate unique item cards for your D&D adventures. 
 
----
-title: CollectibleCardGenerator
-emoji: 🐠
-colorFrom: green
-colorTo: yellow
-sdk: docker
-pinned: false
-license: mit
----
+## Overview
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
-=======
-# CardGenerator
-Takes user input and generates a collectible card with custom or LLM generated text and image generation
->>>>>>> 9a956dd (Polished and launch to Hugging Face)
+This generator leverages an API call to [Replicate](https://replicate.com/) using Llama 3 70b, combined with a custom fine-tuned version of the Stable Diffusion SDXL model. You can find more about the specific modelthis project was based on at [Civitai](https://civitai.com/models/129681/sdxl-faetastic).
+
+## Key Features
+
+- **Custom Fine-Tuning**: The backbone of this generator is a fine-tuned Stable Diffusion SDXL model, specifically optimized for generating high-quality, fantasy-themed images on a unique card border that is themed by your imagination.
+
+- **Consistent Card Design**: To ensure each card maintains a uniform appearance, a LoRA (Locally Optimized Representation Approximation) technique was used. This involved training the model with a hand-crafted dataset of card border images, enabling the system to generate new cards with consistent text and image spaces where the generated text and images can be elegantly integrated.
+
+## How It Works
+
+1. Your intitial text along with the prompt is sent to Llama 3 70b to generate a structured python dictionary.
+2. This new text will populate in interactive text fields. If it isn't perfect you can edit the text to fit your item.
+3. THe final text field is the Stable Diffusion prompt, these generate like one sentence stories describing the scene of your item. This field can also be edited.
+4. **Image and Text Generation**: Now generate 4 card template without text and pick your favorite.
+5. Finally, add text to your favorite template.
+3. **Result**: The final product is a beautifully crafted D&D item card, ready for use in your gaming sessions.
+
+## Example Cards
+
+Below are a few examples of the item cards generated using our tool:
+
+![Example Card 1](url-to-example-card1)
+![Example Card 2](url-to-example-card2)
+
+We hope you enjoy enhancing your Dungeons and Dragons experience with this unique tool. Happy adventuring!

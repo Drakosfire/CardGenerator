@@ -7,6 +7,8 @@ import requests
 import os
 from PIL import Image
 from pathlib import Path
+
+image_list = []
 # Utility Functions to be called from all modules
 
 # Function to return a list of keys of a nested dictionary using it's key value (item or creature)

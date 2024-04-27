@@ -96,7 +96,7 @@ def prompt_user_input():
         print(image_path)
         
         card.render_text_on_card(user_card_image, output_dict)
-        u.delete_files(img2img.image_list)
+        u.delete_files(u.image_list)
 
 
 
