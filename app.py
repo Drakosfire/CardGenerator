@@ -1,4 +1,3 @@
-import replicate
 import img2img
 import card_generator as card
 import utilities as u

@@ -1,0 +1,7 @@
+torch
+
+PyGithub
+pillow
+openai
+sentence_transformers
+gradio
