@@ -1,5 +1,4 @@
 output/
-image_temp/
 models
 cuda_12.4.0_550.54.14_linux.run
 models/
