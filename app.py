@@ -51,9 +51,7 @@ with gr.Blocks() as demo:
 
     # Function called when user generates item info, then assign values of dictionary to variables, output once to State, twice to textbox
     def generate_text_update_textboxes(user_input):
-        u.reclaim_mem()
-
-
+        
         llm_output=useri.call_llm(user_input)
         item_key = list(llm_output.keys())
         
@@ -114,8 +112,7 @@ with gr.Blocks() as demo:
             yield image_list
             
         del preview
-        u.reclaim_mem()
-
+       
         #generated_image_list = img2img.generate_image(num_img,sd_prompt,item_name,selected_border)
         return image_list
     
