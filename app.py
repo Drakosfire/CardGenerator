@@ -298,10 +298,12 @@ with gr.Blocks() as demo:
                                                                         item_quote_output
                                                                         ], 
                                                                         outputs = generate_gallery )
+    list_of_static_dir = ["card_parts/", " fonts/"]
+    gr.set_static_paths(paths=[list_of_static_dir])
     
     
 if __name__ == "__main__":
-    demo.launch(allowed_paths = ["/home/user/app/card_parts"]) 
+    demo.launch() 
 
 
 
