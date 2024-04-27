@@ -1,7 +1,7 @@
 import img2img
 import card_generator as card
 import utilities as u
-import ctypes
+import os
 import user_input as useri
 import gradio as gr
 import template_builder as tb
@@ -298,12 +298,15 @@ with gr.Blocks() as demo:
                                                                         item_quote_output
                                                                         ], 
                                                                         outputs = generate_gallery )
-    list_of_static_dir = ["./card_parts", " ./fonts", "./image_temp"]
+    base_dir = os.path.dirname(os.path.abspath(__file__))  # Gets the directory where the script is located
+    list_of_static_dir = [os.path.join(base_dir, "card_parts"), 
+                        os.path.join(base_dir, "fonts"), 
+                        os.path.join(base_dir, "image_temp")]
     gr.set_static_paths(paths=list_of_static_dir)
     
     
 if __name__ == "__main__":
-    demo.launch() 
+    demo.launch(allowed_paths=list_of_static_dir) 
 
 
 
