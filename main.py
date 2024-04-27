@@ -1,6 +1,5 @@
+import replicate
 import img2img
-from img2img import img_generator
-
 import card_generator as card
 import utilities as u
 import ctypes
@@ -107,20 +106,20 @@ with gr.Blocks() as demo:
     def delete_temp_images():
         image_list = u.directory_contents('./image_temp')
         u.delete_files(image_list)
-        img2img.image_list.clear()
+        u.image_list.clear()
     
     # Called when pressing button to generate image, updates gallery by returning the list of image URLs
     def generate_image_update_gallery(num_img, sd_prompt,item_name, built_template):
         delete_temp_images()
         print(f"sd_prompt is a {type(sd_prompt)}")
         image_list = []
-        image_generator = img_generator()
-        img_gen, prompt = image_generator.load_img_gen(sd_prompt, item_name)
+        
+        
         for x in range(num_img):
-            preview = image_generator.preview_and_generate_image(x,img_gen, prompt, built_template, item_name)
+            preview = img2img.preview_and_generate_image(x,sd_prompt, built_template, item_name)
             image_list.append(preview)
             yield image_list
-            #generate_gallery.change(image_list)
+            
         del preview
         u.reclaim_mem()
 
@@ -189,7 +188,8 @@ with gr.Blocks() as demo:
                                         object_fit = "contain",
                                         height = "auto",
                                         elem_id = "Template Gallery",
-                                        interactive=True) 
+                                        interactive=True,
+                                        type="filepath") 
     
     seed_image_gallery.select(assign_img_path, outputs = selected_seed_image)
     built_template_gallery.upload(u.receive_upload, inputs=built_template_gallery, outputs= selected_seed_image)
@@ -258,7 +258,7 @@ with gr.Blocks() as demo:
         generate_final_item_card = gr.Button(value = "Add Text", elem_id = "Generate user card")
     
     
-    card_gen_button.click(fn = generate_image_update_gallery, inputs =[num_image_to_generate,item_sd_prompt_output,item_name_output,built_template], outputs= generate_gallery)
+    card_gen_button.click(fn = generate_image_update_gallery, inputs =[num_image_to_generate,item_sd_prompt_output,item_name_output,built_template_gallery], outputs= generate_gallery)
     generate_gallery.select(assign_img_path, outputs = selected_generated_image)
 
         # Button logice calls function when button object is pressed, passing inputs and passing output to components
