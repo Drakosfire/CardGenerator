@@ -25,9 +25,10 @@ This generator leverages an API call to [Replicate](https://replicate.com/) usin
 
 ## How It Works
 
-1. Your intitial text along with the prompt is sent to Llama 3 70b to generate a structured python dictionary.
+1. Your intitial text along with the prompt is sent to Llama 3 70b to generate a python dictionary.
 2. This new text will populate in interactive text fields. If it isn't perfect you can edit the text to fit your item.
-3. THe final text field is the Stable Diffusion prompt, these generate like one sentence stories describing the scene of your item. This field can also be edited.
+3. The final text field is the Stable Diffusion prompt, these generate like one sentence stories describing the scene of your item. This field can also be edited.
+## The first image generation take about 2 minutes for model to 'cold boot' after that it's ~10s per image.
 4. **Image and Text Generation**: Now generate 4 card template without text and pick your favorite.
 5. Finally, add text to your favorite template.
 3. **Result**: The final product is a beautifully crafted D&D item card, ready for use in your gaming sessions.
