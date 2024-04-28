@@ -190,7 +190,7 @@ with gr.Blocks() as demo:
                                         show_label = True,
                                         columns = [1], rows = [1],
                                         object_fit = "contain",
-                                        height = "auto",
+                                        height = None,
                                         elem_id = "Template Gallery",
                                         interactive=True,
                                         type="filepath") 
@@ -257,7 +257,7 @@ with gr.Blocks() as demo:
                                     scale= 1,
                                     columns =[4], rows = [1],
                                     object_fit= "fill",
-                                    height = "768",
+                                    height = "auto",
                                     elem_id = "Generated Cards Gallery",
                                     allow_preview=True
                                     )
