@@ -115,14 +115,9 @@ def render_text_on_card(image_path, item_name,
     image = image.filter(ImageFilter.GaussianBlur(.5))
     image_list.append(image)
    
-    image = image.save(f"./output/{item_name}.png")
-    
-    
-
     return image_list
     
 
-#render_text_on_card('./card_templates/Shining Sunset Border.png',test_item )
 
 
 
