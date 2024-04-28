@@ -145,40 +145,44 @@ with gr.Blocks() as demo:
             <h2><b>First:</b> Build a Card Template</h2>
                 </div>""")
     with gr.Row():
-        with gr.Column():
-
-    # Template Gallery instructions
-            gr.HTML(""" <div id="inner"> <header>
-                        <h3>1. Click a border from the 'Card Template Gallery'</h3> 
-                        </div>""")
-        
-    border_gallery = gr.Gallery(label = "Card Template Gallery", 
-                                    scale = 2,
-                                    value = u.index_image_paths("Drakosfire/CardGenerator", "seed_images/card_templates"),
-                                    show_label = True,
-                                    columns = [3], rows = [3],
-                                    object_fit = "contain",
-                                    height = "auto",
-                                    elem_id = "Template Gallery")
-    
-    gr.HTML(""" <div id="inner"> <header>
+        # Template Gallery instructions
+        gr.HTML(""" <div id="inner"> <header>
+                    <h3>1. Click a border from the 'Card Template Gallery'</h3> 
+                    </div>""")
+        gr.HTML(""" <div id="inner"> <header>
                 <h3>2. Click a image from the Seed Image Gallery</h3><br>
                 </div>""")
-    
-    border_gallery.select(assign_img_path, outputs = selected_border_image)
-    seed_image_gallery = gr.Gallery(label= " Image Seed Gallery",
-                                    scale = 2,
-                                    value = u.index_image_paths("Drakosfire/CardGenerator", "seed_images/item_seeds"),
-                                    show_label = True,
-                                    columns = [3], rows = [3],
-                                    object_fit = "contain",
-                                    height = "auto",
-                                    elem_id = "Template Gallery",
-                                    interactive=True)                 
-
-    gr.HTML(""" <div id="inner"> <header><h4> -Or- Upload your own seed image, by dropping it into the 'Generated Template Gallery' </h4><br>
+        gr.HTML(""" <div id="inner"> <header><h4> -Or- Upload your own seed image, by dropping it into the 'Generated Template Gallery' </h4><br>
                 <h3>3. Click 'Generate Card Template'</h3><br>
             </div>""")
+        
+    with gr.Row():
+
+    
+        
+        border_gallery = gr.Gallery(label = "Card Template Gallery", 
+                                        scale = 2,
+                                        value = u.index_image_paths("Drakosfire/CardGenerator", "seed_images/card_templates"),
+                                        show_label = True,
+                                        columns = [3], rows = [3],
+                                        object_fit = "contain",
+                                        height = "auto",
+                                        elem_id = "Template Gallery")
+        
+        
+        
+        border_gallery.select(assign_img_path, outputs = selected_border_image)
+        seed_image_gallery = gr.Gallery(label= " Image Seed Gallery",
+                                        scale = 2,
+                                        value = u.index_image_paths("Drakosfire/CardGenerator", "seed_images/item_seeds"),
+                                        show_label = True,
+                                        columns = [3], rows = [3],
+                                        object_fit = "contain",
+                                        height = "auto",
+                                        elem_id = "Template Gallery",
+                                        interactive=True)                 
+
+    
     
     built_template_gallery = gr.Gallery(label= "Generated Template Gallery",
                                         scale = 1,
@@ -244,19 +248,20 @@ with gr.Blocks() as demo:
                 <h2> <b>Fourth:</b> Click your favorite card then add text, or click 'Generate Four Card Options' again.<br>
                  </h2>
                 </div>""")       
-
+    generate_final_item_card = gr.Button(value = "Add Text", elem_id = "Generate user card")
     with gr.Row():
+        
         generate_gallery = gr.Gallery(label = "Generated Cards",
                                     value = [],
                                     show_label= True,
-                                    scale= 5,
-                                    columns =[1], rows = [4],
+                                    scale= 1,
+                                    columns =[4], rows = [1],
                                     object_fit= "fill",
                                     height = "768",
                                     elem_id = "Generated Cards Gallery",
-                                    allow_preview=False
+                                    allow_preview=True
                                     )
-        generate_final_item_card = gr.Button(value = "Add Text", elem_id = "Generate user card")
+        
     
     
     card_gen_button.click(fn = generate_image_update_gallery,
