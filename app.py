@@ -178,7 +178,7 @@ with gr.Blocks() as demo:
                                         show_label = True,
                                         columns = [3], rows = [3],
                                         object_fit = "contain",
-                                        height = "auto",
+                                        height = None,
                                         elem_id = "Template Gallery",
                                         interactive=True)                 
 
