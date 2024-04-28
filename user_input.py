@@ -3,7 +3,6 @@ import img2img
 import card_generator as card
 import utilities as u
 import sys
-from github import Github
 
 image_path = str
 end_phrase = """<|end_of_turn|>"""
@@ -11,18 +10,7 @@ end_phrase = """<|end_of_turn|>"""
 card_template_path = "./card_templates/"
 temp_image_path = "./image_temp"
 
-def index_image_paths(repo_name,directory_path):
-    g = Github()  # No token needed for public repos
-    repo = g.get_repo(repo_name)
-    contents = repo.get_contents(directory_path)
 
-    files = []
-    for content_file in contents:
-        if content_file.type == "file":
-            media_url = content_file.download_url.replace("raw.githubusercontent.com", "media.githubusercontent.com/media")
-            files.append(media_url)  # Or content_file.path for just the path
-    
-    return files
 
 user_pick_template_prompt = "Pick a template number from this list : "
 user_pick_image_prompt = "Select an image : "

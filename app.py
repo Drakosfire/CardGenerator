@@ -154,7 +154,7 @@ with gr.Blocks() as demo:
         
     border_gallery = gr.Gallery(label = "Card Template Gallery", 
                                     scale = 2,
-                                    value = useri.index_image_paths("Drakosfire/CardGenerator", "seed_images/card_templates"),
+                                    value = u.index_image_paths("Drakosfire/CardGenerator", "seed_images/card_templates"),
                                     show_label = True,
                                     columns = [3], rows = [3],
                                     object_fit = "contain",
@@ -168,7 +168,7 @@ with gr.Blocks() as demo:
     border_gallery.select(assign_img_path, outputs = selected_border_image)
     seed_image_gallery = gr.Gallery(label= " Image Seed Gallery",
                                     scale = 2,
-                                    value = useri.index_image_paths("Drakosfire/CardGenerator", "seed_images/item_seeds"),
+                                    value = u.index_image_paths("Drakosfire/CardGenerator", "seed_images/item_seeds"),
                                     show_label = True,
                                     columns = [3], rows = [3],
                                     object_fit = "contain",

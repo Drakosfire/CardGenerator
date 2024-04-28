@@ -2,8 +2,7 @@ import render_card_text as rend
 from PIL import Image, ImageFilter
 import utilities as u
 import ast
-import os
-
+from urllib.request import urlopen
 
 def save_image(image,item_key):
     image.save(f"{item_key['Name']}.png")
@@ -13,28 +12,16 @@ def save_image(image,item_key):
 #shop_inventory = inv.inventory
 #purchased_item_key = shop_inventory['Shortsword']
 #border_path = './card_templates/Shining Sunset Border.png'
-base_dir = os.path.dirname(os.path.abspath(__file__)) 
-value_overlay_path = os.path.join(base_dir, "card_parts/Value_box_transparent.png")
+base_path = "https://media.githubusercontent.com/media/Drakosfire/CardGenerator/main/card_parts/"
+value_overlay_path = f"{base_path}Value_box_transparent.png"
 test_item = {'Name': 'Pustulent Raspberry', 'Type': 'Fruit', 'Value': '1 cp', 'Properties': ['Unusual Appearance', 'Rare Taste'], 'Weight': '0.2 lb', 'Description': 'This small fruit has a pustulent appearance, with bumps and irregular shapes covering its surface. Its vibrant colors and strange texture make it an oddity among other fruits.', 'Quote': 'A fruit that defies expectations, as sweet and sour as life itself.', 'SD Prompt': 'A small fruit with vibrant colors and irregular shapes, bumps covering its surface.'}
-sticker_path_dictionary = {'Default': os.path.join(base_dir, "card_parts/Sizzek Sticker.png"),
-                            'Common': os.path.join(base_dir, "card_parts/card_parts/Common.png"),
-                            'Uncommon': os.path.join(base_dir, "card_parts/card_parts/Uncommon.png"),
-                            'Rare': os.path.join(base_dir, "card_parts/Rare.png"),
-                            'Very Rare':os.path.join(base_dir, "card_parts/card_parts/card_parts/Very Rare.png"),
-                            'Legendary':os.path.join(base_dir, "card_parts/Legendary.png")}
+sticker_path_dictionary = {'Default': f"{base_path}Sizzek Sticker.png",
+                            'Common': f"{base_path}Common.png",
+                            'Uncommon': f"{base_path}Uncommon.png",
+                            'Rare': f"{base_path}Rare.png",
+                            'Very Rare':f"{base_path}Very Rare.png",
+                            'Legendary':f"{base_path}Legendary.png"}
 
-
-def print_directory_structure(startpath):
-    for root, dirs, files in os.walk(startpath):
-        level = root.replace(startpath, '').count(os.sep)
-        indent = ' ' * 4 * (level)
-        print(f"{indent}{os.path.basename(root)}/")
-        subindent = ' ' * 4 * (level + 1)
-        for f in files:
-            print(f"{subindent}{f}")
-base_dir = os.path.dirname(os.path.abspath(__file__))
-print("Base Directory:", base_dir)
-print_directory_structure(base_dir)
 
 # Function that takes in an image url and a dictionary and uses the values to print onto a card.
 def paste_image_and_resize(base_image,sticker_path, x_position, y_position,img_width, img_height, purchased_item_key = None):
@@ -46,7 +33,8 @@ def paste_image_and_resize(base_image,sticker_path, x_position, y_position,img_w
         else: sticker_path = sticker_path['Default']
     
     # Load the image to paste
-    image_to_paste = Image.open(sticker_path)
+    
+    image_to_paste = Image.open(urlopen(sticker_path))
 
     # Define the new size (scale) for the image you're pasting
     
@@ -116,6 +104,7 @@ def render_text_on_card(image_path, item_name,
     image = rend.render_text_with_dynamic_spacing(image, item_name, title_center_position, title_area_width, title_area_height,font_path,initial_font_size)
     image = rend.render_text_with_dynamic_spacing(image,type_text , type_center_position, type_area_width, type_area_height,font_path,initial_font_size)
     image = rend.render_text_with_dynamic_spacing(image, item_description + '\n\n' + item_properties, description_position, description_area_width, description_area_height,font_path,initial_font_size, description = True)
+    #Paste value overlay
     paste_image_and_resize(image, value_overlay_path,x_position= 0,y_position=0, img_width= 768, img_height= 1024)
     image = rend.render_text_with_dynamic_spacing(image, item_value, value_position, value_area_width, value_area_height,font_path,initial_font_size)
     image = rend.render_text_with_dynamic_spacing(image, item_quote, quote_position, quote_area_width, quote_area_height,italics_font_path,initial_font_size, quote = True)
