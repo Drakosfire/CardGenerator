@@ -13,6 +13,8 @@ M_MMAP_THRESHOLD = -3
 
 # Set malloc mmap threshold.
 libc.mallopt(M_MMAP_THRESHOLD, 2**20)
+
+
 initial_name = "A Crowbar"
 
 with gr.Blocks() as demo:

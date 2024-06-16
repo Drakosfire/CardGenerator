@@ -1,13 +1,13 @@
-from diffusers import (StableDiffusionXLImg2ImgPipeline, AutoencoderKL)                   
+from diffusers import (StableDiffusionXLImg2ImgPipeline)                   
 from diffusers.utils import load_image
 import torch
 import time
 import utilities as u
-import card_generator as card
-from PIL import Image
+
 
 pipe = None
 start_time = time.time()
+
 torch.backends.cuda.matmul.allow_tf32 = True
 model_path = ("models/stable-diffusion/card-generator-v1/card-generator-v1.safetensors")
 lora_path = "models/stable-diffusion//card-generator-v1/blank-card-template-5.safetensors"
@@ -30,7 +30,6 @@ def load_img_gen(prompt, item, mimic = None):
                                                          torch_dtype=torch.float16, 
                                                          variant="fp16").to("cuda")  
     # Load LoRAs for controlling image
-    #pipe.load_lora_weights(lora_path, weight_name = "blank-card-template-5.safetensors",adapter_name = 'blank-card-template')    
     pipe.load_lora_weights(detail_lora_path, weight_name = "add-detail-xl.safetensors", adapter_name = "add-detail-xl")
     
     # If mimic keyword has been detected, load the mimic LoRA and set adapter values
