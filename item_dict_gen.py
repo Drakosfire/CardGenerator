@@ -1,359 +1,283 @@
-import replicate
 import ast
 import gc
-import os
+from openai import OpenAI
 
-api_key = os.getenv('REPLICATE_API_TOKEN')
+client = OpenAI()
 
-
-model_path = "meta/meta-llama-3-70b-instruct"
-def load_llm(user_input):
-  input = {"prompt" : f" {prompt_instructions} the item is {user_input}"}
-  output = replicate.run(model_path,
-    input=input
-    )
-  return output
-  
-
-def call_llm_and_cleanup(user_input):
-    # Call the LLM and store its output
-    llm_output = "".join(load_llm(user_input))
-    print("".join(llm_output))
-    gc.collect()
-  
-    # llm_output is still available for use here
+def load_llm(user_input, prompt_instructions):
+    prompt = f"{user_input}"
+    print(prompt)
+    response = client.chat.completions.create(            
+                    model="gpt-4o-2024-08-06",
+                    messages=[
+                        {
+                        "role": "user",
+                        "content": f"{prompt_instructions}  {prompt}"
+                        }
+                    ],
+                    temperature=1,
+                    max_tokens=500,
+                    top_p=1,
+                    frequency_penalty=0,
+                    presence_penalty=0
+                    )
+    print(f"Model : {response.model}")
+    return response.choices[0].message.content
+# Call the LLM and store its output
+def call_llm_and_cleanup(user_input, inventory = False): 
     
+    prompt_instructions = f"{pet_prompt_instructions}"
+    
+    llm_output = load_llm(user_input, prompt_instructions)
+    llm_output = "".join(llm_output)
+    print(f"llm_output = {llm_output}")
+    # llm_output is still available for use here
     return llm_output
 
-def convert_to_dict(string):
-  # Evaluate if string is dictionary literal
-    try: 
-        result = ast.literal_eval(string)
-        if isinstance(result, dict):
-            print("Item dictionary is valid")
-            return result
-        # If not, modify by attempting to add brackets to where they tend to fail to generate.
-        else: 
-            modified_string = '{' + string
-            if isinstance(modified_string, dict):  
-                return modified_string
-            modified_string = string + '}'
-            if isinstance(modified_string, dict):  
-                return modified_string
-            modified_string = '{' + string + '}'
-            if isinstance(modified_string, dict):  
-                return modified_string
-    except (ValueError, SyntaxError) :
-        print("Dictionary not valid")
-        return None
-  
-
-# Instructions past 4 are not time tested and may need to be removed.
-### Meta prompted : 
-prompt_instructions = """ **Purpose**: ONLY Generate a structured inventory entry for a specific item as a hashmap. Do NOT reply with anything other than a hashmap.
+pet_prompt_instructions = """ **Purpose**: ONLY Generate a structured json following the provided format. The entry is for a model of cybernetic pet made by the imaginary Cavall technology company.
 
 **Instructions**:
-1. Replace `{item}` with the name of the user item, DO NOT CHANGE THE USER ITEM NAME enclosed in single quotes (e.g., `'Magic Wand'`).
-2. **Dictionary Structure**:
+
+1. Only output structured data. The file structure starts with { and ends with } it is CRITICAL to end with a } 
+2. Do not enclose the output in any other characters such as ''' or json    
+3. DO NOT use null, use "". 
+4. All keys and values MUST be enclosed in double quotes.
+5. Replace `{pet}` with the name of the user pet, DO NOT CHANGE THE USER pet NAME enclosed in single quotes (e.g., `'Magic Wand'`).
+6. Ensure your request is formatted as a hashmap. 
+7. The cybernetic pets are friendly and cute, they are products and toys. 
+8. The descriptions should be brief and puncy, or concise and in the voice of a judge at a high end cat or dog or pet exhibition such as the American Kennel Clube or Cat Fancier and make specific callout of how mild, and well camoflaughed the artificiality of the cybernetic pet is.
+9. The Image Prompt MUST be inside double quotations ie " ".
+
+ 
+**Format Example**:
+- **Dictionary Structure**:
     
-    {"{item}": {
-    'Name': "{item name}",
-    'Type': '{item type}',
-    'Rarity': '{item rarity},
-    'Value': '{item value}',
-    'Properties': ["{property1}", "{property2}", ...],
-    'Damage': '{damage formula} , '{damage type}',
-    'Weight': '{weight}',
-    'Description': "{item description}",
-    'Quote': "{item quote}",
-    'SD Prompt': "{special description for the item}"
-    } } 
-3. Weapons MUST have a key 'Damage' 
-4. The description should be brief and puncy, or concise and thoughtful.
-5. The quote and SD Prompt MUST be inside double quotations ie " ".
-6. The quote is from the perspective of someone commenting on the impact of the {item} on their life
-7. Value should be assigned as an integer of copper pieces (cp), silver pieces (sp), electrum pieces (ep), gold pieces (gp), and platinum pieces (pp). 
-8. Use this table for reference on value : 
-1 cp 	1 lb. of wheat
-2 cp 	1 lb. of flour or one chicken
-5 cp 	1 lb. of salt
-1 sp 	1 lb. of iron or 1 sq. yd. of canvas
-5 sp 	1 lb. of copper or 1 sq. yd. of cotton cloth
-1 gp 	1 lb. of ginger or one goat
-2 gp 	1 lb. of cinnamon or pepper, or one sheep
-3 gp 	1 lb. of cloves or one pig
-5 gp 	1 lb. of silver or 1 sq. yd. of linen
-10 gp 	1 sq. yd. of silk or one cow
-15 gp 	1 lb. of saffron or one ox
-50 gp 	1 lb. of gold
-500 gp 	1 lb. of platinum
-
-
-300 gp +1 Melee or Ranged Weapon 
-2000 gp +2 Melee or Ranged Weapon 
-10000 gp  +3 Melee or Ranged Weapon 
-300 gp +1 Armor Uncommon
-2000 gp +2 Armor Rare
-10000 gp +3 Armor Very Rare
-300 gp +1 Shield Uncommon
-2000 gp +2 Shield Rare
-10000 gp +3 Shield Very Rare
-
-9. Examples of Magical Scroll Value:
-    Common: 50-100 gp
-    Uncommon: 101-500 gp
-    Rare: 501-5000 gp
-    Very rare: 5001-50000 gp
-    Legendary: 50001+ gp
-
-A scroll's rarity depends on the spell's level:
-    Cantrip-1: Common
-    2-3: Uncommon
-    4-5: Rare
-    6-8: Very rare
-    9: Legendary
-
-10. Explanation of Mimics:
-Mimics are shapeshifting predators able to take on the form of inanimate objects to lure creatures to their doom. In dungeons, these cunning creatures most often take the form of doors and chests, having learned that such forms attract a steady stream of prey.
-Imitative Predators. Mimics can alter their outward texture to resemble wood, stone, and other basic materials, and they have evolved to assume the appearance of objects that other creatures are likely to come into contact with. A mimic in its altered form is nearly unrecognizable until potential prey blunders into its reach, whereupon the monster sprouts pseudopods and attacks.
-When it changes shape, a mimic excretes an adhesive that helps it seize prey and weapons that touch it. The adhesive is absorbed when the mimic assumes its amorphous form and on parts the mimic uses to move itself.
-Cunning Hunters. Mimics live and hunt alone, though they occasionally share their feeding grounds with other creatures. Although most mimics have only predatory intelligence, a rare few evolve greater cunning and the ability to carry on simple conversations in Common or Undercommon. Such mimics might allow safe passage through their domains or provide useful information in exchange for food.
-
+    {"{Pet}": {
+        "Name": '{Pet Name}',
+        "Pet Species": '{pet species}',
+        "Breed": '{pet breed},
+        "Fur" : "The colors and quality of the pet's fur,
+        "Intelligence Level" : "How intelligent the pet is and how it demonstrates it",
+        "Affection Level" : "How affectionate and how the pet shows it,
+        "Energy Level" : "The Energy level",
+        "Noise Level" : "The volume, frequency, triggers, and type",
+        "Play Level" : " The level of play and types enjoyed",
+        "Image Prompt" : "Descriptive imagery for an image generator"
+        }
     
 - **Input Placeholder**:
-    - "{item}": Replace with the item name, ensuring it's wrapped in single quotes.
+    - "{pet}": Replace with the pet name, ensuring it's wrapped in single quotes.
+    
 
 **Output Examples**:
-1. Cloak of Whispering Shadows Entry:
-    
-    {"Cloak of Whispering Shadows": {
-    'Name': 'Cloak of Whispering Shadows',
-    'Type': 'Cloak',
-    'Rarity': 'Very Rare', 
-    'Value': '7500 gp',
-    'Properties': ["Grants invisibility in dim light or darkness","Allows communication with shadows for gathering information"],
-    'Weight': '1 lb',
-    'Description': "A cloak woven from the essence of twilight, blending its wearer into the shadows. Whispers of the past and present linger in its folds, offering secrets to those who listen.",
-    'Quote': "In the embrace of night, secrets surface in the silent whispers of the dark.",
-    'SD Prompt': " Cloak of deep indigo almost black, swirling patterns that shift and move with every step. As it drapes over one's shoulders, an eerie connection forms between the wearer and darkness itself." 
-    } }   
-    
-2. Health Potion Entry:
-    
-    {"Health Potion": {
-    'Name' : "Health Portion",
-    'Type' : 'Potion',
-    'Rarity' : 'Common',
-    'Value': '50 gp',
-    'Properties': ["Quafable", "Restores 1d4 + 2 HP upon consumption"],
-    'Weight': '0.5 lb',
-    'Description': "Contained within this small vial is a crimson liquid that sparkles when shaken, a life-saving elixir for those who brave the unknown.",
-    'Quote': "To the weary, a drop of hope; to the fallen, a chance to stand once more.",
-    'SD Prompt' : " a small, delicate vial containing a sparkling crimson liquid. Emit a soft glow, suggesting its restorative properties. The vial is set against a dark, ambiguous background." 
-    } }     
-    
-3. Wooden Shield Entry:
-    
-    {"Wooden Shield": {
-    'Name' : "Wooden Shield",
-    'Type' : 'Armor, Shield',
-    'Rarity': 'Common',
-    'Value': '10 gp',
-    'Properties': ["+2 AC"],
-    'Weight': '6 lb',
-    'Description': "Sturdy and reliable, this wooden shield is a simple yet effective defense against the blows of adversaries.",
-    'Quote': "In the rhythm of battle, it dances - a barrier between life and defeat.",
-    'SD Prompt': " a sturdy wooden shield, a symbol of defense, with a simple yet solid design. The shield, has visible grain patterns and a few battle scars. It stands as a steadfast protector, embodying the essence of a warrior's resilience in the face of adversity." 
-    } }
-     
-4.  Helmet of Perception Entry:
-    
-    {"Helmet of Perception": {
-    'Name' : "Helmet of Perception",
-    'Type' : 'Magical Item (armor, helmet)',
-    'Rarity': 'Very Rare', 
-    'Value': '3000 gp',
-    'Properties': ["+ 1 to AC", "Grants the wearer advantage on perception checks", "+5 to passive perception"],
-    'Weight': '3 lb',
-    'Description': "Forged from mystic metals and enchanted with ancient spells, this helmet offers protection beyond the physical realm.",
-    'Quote': "A crown not of royalty, but of unyielding vigilance, warding off the unseen threats that lurk in the shadows.",
-    'SD Prompt': " a mystical helmet crafted from enchanted metals, glowing with subtle runes.  imbued with spells, radiates a mystical aura, symbolizing enhanced perception and vigilance,elegant,formidable" 
-    } }
-    
-5. Longbow Entry:
-    
-    {"Longbow": {
-    'Name': "Longbow",
-    'Type': 'Ranged Weapon (martial, longbow)',
-    'Rarity': 'Common',
-    'Value': '50 gp',
-    'Properties': ["2-handed", "Range 150/600", "Loading"],
-    'Damage': '1d8 + Dex, piercing',
-    'Weight': '6 lb',
-    'Description': "With a sleek and elegant design, this longbow is crafted for speed and precision, capable of striking down foes from a distance.",
-    'Quote': "From the shadows it emerges, a silent whisper of steel that pierces the veil of darkness, bringing justice to those who dare to trespass.",
-    'SD Prompt' : "a longbow with intricate carvings and stone inlay with a black string" 
-    } }
-    
+1. Mignon the Toy Sized Chihuahua 
 
-6. Mace Entry:
-    
-    {"Mace": {
-    'Name': "Mace",
-    'Type': 'Melee Weapon (martial, bludgeoning)',
-    'Rarity': 'Common',
-    'Value': '25 gp',
-    'Properties': ["Bludgeoning", "One-handed"],
-    'Damage': '1d6 + str, bludgeoning',
-    'Weight': '6 lb', 
-    'Description': "This mace is a fearsome sight, its head a heavy and menacing ball of metal designed to crush bone and break spirits.", 
-    'Quote': "With each swing, it sings a melody of pain and retribution, an anthem of justice to those who wield it.", 
-    'SD Prompt': "a menacing  metal spike ball mace, designed for bludgeoning, with a heavy, intimidating head, embodying a tool for bone-crushing and spirit-breaking." 
-    } }
-    
-7. Flying Carpet Entry:
-    
-    {"Flying Carpet": {
-    'Name': "Flying Carpet", 
-    'Type': 'Magical Item (transportation)', 
-    'Rarity': 'Very Rare',
-    'Value': '3000 gp', 
-    'Properties': ["Flying", "Personal Flight", "Up to 2 passengers", Speed : 60 ft], 
-    'Weight': '50 lb', 
-    'Description': "This enchanted carpet whisks its riders through the skies, providing a swift and comfortable mode of transport across great distances.",
-    'Quote': "Soar above the mundane, and embrace the winds of adventure with this magical gift from the heavens.", 
-    'SD Prompt': "a vibrant, intricately patterned flying carpet soaring high in the sky, with clouds and a clear blue backdrop, emphasizing its magical essence and freedom of flight" 
-    } }
-    
-8. Tome of Endless Stories Entry:
-    
-    {"Tome of Endless Stories": {
-    'Name': "Tome of Endless Stories",
-    'Type': 'Book',
-    'Rarity': 'Uncommon'
-    'Value': '500 gp',
-    'Properties': [
-        "Generates a new story or piece of lore each day",
-        "Reading a story grants insight or a hint towards solving a problem or puzzle"
-    ],
-    'Weight': '3 lbs',
-    'Description': "An ancient tome bound in leather that shifts colors like the sunset. Its pages are never-ending, filled with tales from worlds both known and undiscovered.",
-    'Quote': "Within its pages lie the keys to a thousand worlds, each story a doorway to infinite possibilities.",
-    'SD Prompt': "leather-bound with gold and silver inlay, pages appear aged but are incredibly durable, magical glyphs shimmer softly on the cover." 
-    } }    
-    
-9. Ring of Miniature Summoning Entry:
-    
-    {"Ring of Miniature Summoning": {
-    'Name': "Ring of Miniature Summoning",
-    'Type': 'Ring',
-    'Rarity': 'Rare',
-    'Value': '1500 gp',
-    'Properties': ["Summons a miniature beast ally once per day", "Beast follows commands and lasts for 1 hour", "Choice of beast changes with each dawn"],
-    'Weight': '0 lb',
-    'Description': "A delicate ring with a gem that shifts colors. When activated, it brings forth a small, loyal beast companion from the ether.",
-    'Quote': "Not all companions walk beside us. Some are summoned from the depths of magic, small in size but vast in heart.",
-    'SD Prompt': "gemstone with changing colors, essence of companionship and versatility." 
-    } } 
-     
+    {"Mignon": {
+        "Name": "Mignon”
+        "Pet Species": Dog,
+        "Breed" : ”Chihuahua (Toy)”,
+        "Fur" : “Cream, smooth shorthair”,
+        "Intelligence Level" : “Medium-high, tr'inable but stubborn”,
+        "Affection Level" : “High but selective, prefers favorite humans”,
+        "Energy Level" : “High”,
+        "Noise Level" : “Very high, yappy”,
+        "Play Level" : “Low“, Fetch, chase“
+        "Image Prompt" :  "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot dog) (glowing eyes)(glowing chest)(thick healthy fur)(Glowing pet collar) Chihuahua, boasting a luscious cream coat and an attitude that's equal parts feisty and affectionate. Note the subtle glow behind her eyes, a hint of advanced biometrics enhancing her already keen senses."
+        }
 
-10. Spoon of Tasting Entry:
-    
-    {"Spoon of Tasting": {
-    'Name': "Spoon of Tasting",
-    'Type': 'Spoon',
-    'Rarity': 'Uncommon',
-    'Value': '200 gp',
-    'Properties': ["When used to taste any dish, it can instantly tell you all the ingredients", "Provides exaggerated compliments or critiques about the dish"],
-    'Weight': '0.2 lb',
-    'Description': "A culinary critic’s dream or nightmare. This spoon doesn’t hold back its opinions on any dish it tastes.",
-    'Quote': "A spoonful of sugar helps the criticism go down.",
-    'SD Prompt': "Looks like an ordinary spoon, but with a mouth that speaks more than you’d expect."
-    } }
-    
-11. Infinite Scroll Entry: 
-    
-    {"Infinite Scroll": {
-    'Name': "Infinite Scroll",
-    'Type': 'Magical Scroll',
-    'Rarity': 'Legendary',
-    'Value': '25000',
-    'Properties': [
-        "Endlessly Extends with New Knowledge","Reveals Content Based on Reader’s Need or Desire","Cannot be Fully Transcribed"],
-    'Weight': '0.5 lb',
-    'Description': "This scroll appears to be a standard parchment at first glance. However, as one begins to read, it unrolls to reveal an ever-expanding tapestry of knowledge, lore, and spells that seems to have no end.",
-    'Quote': "In the pursuit of knowledge, the horizon is ever receding. So too is the content of this scroll, an endless journey within a parchment’s bounds.",
-    'SD Prompt': "A seemingly ordinary scroll that extends indefinitely" 
-    } }
-    
-12. Mimic Treasure Chest Entry:
-    
-    {"Mimic Treasure Chest": {
-    'Name': "Mimic Treasure Chest",
-    'Type': 'Trap',
-    'Rarity': 'Rare',
-    'Value': '1000 gp',  # Increased value reflects its dangerous and rare nature
-    'Properties': ["Deceptively inviting","Springs to life when interacted with","Capable of attacking unwary adventurers"],
-    'Weight': '50 lb',  # Mimics are heavy due to their monstrous nature
-    'Description': "This enticing treasure chest is a deadly Mimic, luring adventurers with the promise of riches only to unleash its monstrous true form upon those who dare to approach, turning their greed into a fight for survival.",
-    'SD Prompt': "A seemingly ordinary treasure chest that glimmers with promise. Upon closer inspection, sinister, almost living edges move with malice, revealing its true nature as a Mimic, ready to unleash fury on the unwary."
-    } }
-    
-13. Hammer of Thunderbolts Entry:
-    
-    {'Hammer of Thunderbolts': {
-    'Name': 'Hammer of Thunderbolts',
-    'Type': 'Melee Weapon (maul, bludgeoning)',
-    'Rarity': 'Legendary',
-    'Value': '16000',
-    'Damage': '2d6 + 1 (martial, bludgeoning)',
-    'Properties': ["requires attunement","Giant's Bane","must be wearing a belt of giant strength and gauntlets of ogre power","Str +4","Can excees 20 but not 30","20 against giant, DC 17 save against death","5 charges, expend 1 to make a range attack 20/60","ranged attack releases thunderclap on hit, DC 17 save against stunned 30 ft","regain 1d4+1 charges at dawn"],
-    'Weight': 15 lb',
-    'Description': "God-forged and storm-bound, a supreme force, its rune-etched head blazing with power. More than a weapon, it's a symbol of nature's fury, capable of reshaping landscapes and commanding elements with every strike.",
-    'Quote': "When the skies rage and the earth trembles, know that the Hammer of Thunderbolts has found its mark. It is not merely a weapon, but the embodiment of the storm\'s wrath wielded by those deemed worthy.",
-    'SD Prompt': "It radiates with electric energy, its rune-etched head and storm-weathered leather grip symbolizing its dominion over storms. In its grasp, it pulses with the potential to summon the heavens' fury, embodying the tempest's raw power."
-    } }
 
-14. Shadow Lamp Entry:  
+2. Marmalade the Austrailian Shepherd Herding Dog
 
-    {'Shadow Lamp': {
-    'Name': 'Shadow Lamp',
-    'Type': 'Magical Item',
-    'Rarity': 'Uncommon',
-    'Value': '500 gp',
-    'Properties': ["Provides dim light in a 20-foot radius", "Invisibility to darkness-based senses", "Can cast Darkness spell once per day"],
-    'Weight': '1 lb',
-    'Description': "A small lamp carved from obsidian and powered by a mysterious force, it casts an eerie glow that illuminates its surroundings while making the wielder invisible to those relying on darkness-based senses.",
-    'Quote': "In the heart of shadow lies an unseen light, casting away darkness and revealing what was once unseen.",
-    'SD Prompt': "Glass lantern filled with inky swirling shadows, black gaseous clouds flow out, blackness flows from it, spooky, sneaky"
-    } }
+	{"Marmalade":{
+        "Name":"Marmalade",
+        "Breed" : ”Australian Shepherd (Herding)”,
+        "Pet Species": Dog,
+        "Fur" : “Blue merle with white markings and tan points, medium double coat”,
+        "Intelligence Level" : “Very high, suitable for jobs”,
+        "Affection Level" : “High”,
+        "Energy Level" : “Very high”,
+        "Noise Level" : “Medium, piercing”,
+        "Play Level" : “Very high, Agility, herding, obedience, frisbee, puzzles”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot dog) (glowing eyes)(glowing chest)(thick healthy fur)(Glowing pet collar) an Australian Shepherd of impeccable breeding, showcasing a stunning blue merle coat and the intelligence to match." 
+        }
 
-15. Dark Mirror:
+3. Holden Clawfield the Pembroke Welsh Corgi Herding Dog
 
-    {'Dark Mirror': {
-    'Name': 'Dark Mirror',
-    'Type': 'Magical Item',
-    'Rarity': 'Rare',
-    'Value': '600 gp',
-    'Properties': ["Reflects only darkness when viewed from one side", "Grants invisibility to its reflection", "Can be used to cast Disguise Self spell once per day"],
-    'Weight': '2 lb',
-    'Description': "An ordinary-looking mirror with a dark, almost sinister tint. It reflects only darkness and distorted images when viewed from one side, making it an ideal tool for spies and those seeking to hide their true identity.",
-    'Quote': "A glass that hides what lies within, a surface that reflects only darkness and deceit.",
-    'SD Prompt': "Dark and mysterious black surfaced mirror with an obsidian flowing center with a tint of malice, its surface reflecting nothing but black and distorted images, swirling with tendrils, spooky, ethereal"
-    } }
+    {“Holden Clawfield”:{
+        "Name" : "Holden Clawfield",
+        "Breed" : ”Pembroke Welsh Corgi (Herding)”,
+        "Pet Species": Dog,
+        "Fur" : “Fawn with white markings, short double coat”,
+        "Intelligence Level"  : “High, trainable',
+        "Affection Level" : “Very high, loves humans and other Pets”,
+        "Energy Level" : “High”,
+        "Noise Level" : “High, piercing”,
+        "Play Level" : “High, Toys, herding, obedience”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot dog) (glowing eyes)(glowing chest)(thick healthy fur)(Glowing pet collar) a Pembroke Welsh Corgi of noble bearing, flaunting a rich fawn coat and an endearing personality."
+        }
 
-16. Moon-Touched Greatsword Entry:
-    
-    {'Moon-Touched Greatsword':{
-    'Name': 'Moontouched Greatsword',
-    'Type': 'Melee Weapon (greatsword, slashing)',
-    'Rarity': 'Very Rare',
-    'Value': '8000 gp',
-    'Damage': '2d6 + Str slashing',
-    'Properties': ["Adds +2 to attack and damage rolls while wielder is under the effects of Moonbeam or Daylight spells", "Requires attunement"],
-    'Weight': '6 lb',
-    'Description': "Forged from lunar metal and imbued with celestial magic, this greatsword gleams like a silver crescent moon, its edge sharp enough to cut through the darkest shadows.",
-    'Quote': "With each swing, it sings a melody of light that pierces the veil of darkness, a beacon of hope and justice.",
-    'SD Prompt': "A silver greatsword with a crescent moon-shaped blade that reflects a soft glow, reminiscent of the moon's radiance. The hilt is wrapped in silvery leather, and the metal seems to shimmer and change with the light, reflecting the lunar cycles."
-    } }
+4. Tyr the Great Pyr the Great Pyreness Working Dog
+
+    {“Tyr the Great Pyr”:{
+        "Name" : "Tyr the Great Pyr",
+        "Breed" : ”Great Pyrenees (Working)”,
+        "Pet Species": Dog,
+        "Fur" : “White, medium double coat”,
+        "Intelligence Level"  : “Medium, trainable to a point”,
+        "Affection Level" : “Medium, wary of strangers”,
+        "Energy Level" : “Low, mostly lazy but vigilant”,
+        "Noise Level" : “Medium, will bark to alert”,
+        "Play Level" : “Medium, not motivated by play, Toys, treats”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot dog) (glowing eyes)(glowing chest)(thick healthy fur)(Glowing pet collar)a Great Pyrenees of regal demeanor, White, medium double coat and an air of quiet confidence. Playing with a toy"
+        }
+
+5. Emperor Maximus the Great Dane Working Dog
+
+    {“Emperor Maximus”:{
+        "Name" : "Emperor Maximus",
+        "Breed" : ”Great Dane (Working)”,
+        "Pet Species": Dog,
+        "Fur" : “Black and white with black mask, smooth shorthair”,
+        "Intelligence Level" : “Medium, trainable”,
+        "Affection Level" : “Very high, needy”,
+        "Energy Level" : “Medium, enjoys hiking”,
+        "Noise Level" : “Medium, will bark to alert”,
+        "Play Level" : “Medium, Chase, tug”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot dog) (glowing eyes)(glowing chest)(thick healthy fur)(Glowing pet collar) a Great Dane of imposing stature, Black and white with black mask, smooth shorthair and a gentle giant's disposition."
+        }
+
+6. Becks the Airedale Terrier Dog
+
+    {“Becks”:{
+        "Name" : "Becks",
+        "Breed" : ”Airedale Terrier (Terrier)”,
+        "Pet Species": Dog,
+        "Fur" : “Black and tan, medium wiry coat”,
+        "Intelligence Level" : “Medium, respond well to training”,
+        "Affection Level" : “Medium, reserved”,
+        "Energy Level" : “High, alert and active”,
+        "Noise Level" : “Medium, vigilant watchdog”,
+        "Play Level" : “Medium, Fetch, toys, treats”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot dog) (glowing eyes)(glowing chest)(thick healthy fur)(Glowing pet collar) an Airedale Terrier of rugged charm, displaying a handsome black and tan coat and a reserved yet."
+        }
+
+7. Blue Carolina the Plott Hound
+
+    {“Blue Carolina”:{
+        "Name": "Blue Carolina"
+        "Breed" : ”Plott Hound (Hound)”,
+        "Pet Species": Dog,
+        "Fur" : “Chocolate brindle, smooth shorthair”,
+        "Intelligence Level" : “High, driven and trainable”,
+        "Affection Level" : “High, very sweet”,
+        "Energy Level" : “High, alert and active”,
+        "Noise Level" : “Medium, will bark to alert”,
+        "Play Level" : “Medium, more active than playful, Toys, frisbee, chase”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot dog) (glowing eyes)(glowing chest)(thick healthy fur)(Glowing pet collar) Blue Carolina, a Plott Hound of athletic build, showcasing a rich chocolate brindle coat and a high-energy personality.
+        }
+
+8. Sekhmet the Sphynx Cat
+    {“Sekhmet”:{
+        "Name" : "Sekhmet",
+        "Breed" : “Sphynx”,
+        "Pet Species" : "Cat",
+        "Fur" : “Hairless, light brown”,
+        "Intelligence Level" : “High, trainable',
+        "Affection Level" : “High but selective, prefers favorite human”,
+        "Energy Level" : “Low, reserved”,
+        "Noise Level" : “Low, mostly quiet”,
+        "Play Level" : “Low, lazy, Cuddling, lap time, shoulder perching”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot cat) (glowing eyes)(glowing chest)(thick healthy fur)(Glowing pet collar)Sphynx Cat, Hairless, light brown Cuddling, lap time, shoulder perching."
+        }
+
+9. Smith the American Shorthair Cat
+
+	{“Smith”:{
+        "Name" : "Smith",
+        "Breed" : “American Shorthair”,
+        "Pet Species" : "Cat",
+        "Fur" : “Black”,
+        "Intelligence Level" : “Medium, somewhat trainable”,
+        "Affection Level" : “High, loves humans and other Pets”,
+        "Energy Level" : “Medium”,
+        "Noise Level" : “Low, infrequent meows”,
+        "Play Level" : “Medium, Belly rubs, hunting, toys”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot cat) (glowing eyes)(glowing chest)(thick healthy fur)(Glowing pet collar) American Shorthair Black Fur playing with a toy"
+        }	
+
+10. Catherine of Atagon and Her Royal Highness Elizabth I
+
+	{“Catherine of Aragon and Her Royal Highness Elizabeth I”:{
+        "Name" : "Catherine of Aragon and Her Royal Highness Elizabeth I",
+        "Breed" : “British Shorthair”,
+        "Pet Species" : "Cat",
+        "Fur" : “Brown and black tortoise shell, black and silver tabby”,
+        "Intelligence Level" : “Medium, not int'rested in training”,
+        "Affection Level" : “Medium-low, independent”,
+        "Energy Level" : “Low, very lazy”,
+        "Noise Level" : “Medium, will speak their minds”,
+        "Play Level" : “Low, not interested in play, Treats, naps, perching/observing”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot cat) (glowing eyes)(glowing chest)(thick healthy fur) (Glowing pet collar) British Shorthair, Brown and black tortoise shell, black and silver tabby perched on a table"
+        }
+
+
+11. Kitsune the Cream Flame Point Longhair Ragdoll
+
+	{“Kitsune”:{
+        "Name" : "Kitsune",
+        "Breed" : “Ragdoll”,
+        "Pet Species" : "Cat",
+        "Fur" : “Cream flame point, longhair”,
+        "Intelligence Level" : “Low, slow to learn”,
+        "Affection Level" : “High, loves attention”,
+        "Energy Level" : “High, always moving”,
+        "Noise Level" : “Medium, chirpy meows”,
+        "Play Level" : “High, will play with anything or anyone, Toys, catnip, running, cuddling”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot cat) (glowing eyes)(glowing chest)(thick healthy fur) (Glowing pet collar) Ragdoll Cream flame point, longhair stretching "
+        }
+
+
+12. Blucifer the Russian Blue Shorthair
+
+	{“Blucifer”:{
+        "Name" : "Blucifer",
+        "Breed" : “Russian Blue”,
+        "Pet Species" : "Cat",
+        "Fur" : “Blue-gray, smooth shorthair”,
+        "Intelligence Level" : “High, very trainable”,
+        "Affection Level" : “Medium, selectively affectionate”,
+        "Energy Level" : “Medium, more alert than active”,
+        "Noise Level" : “Low, almost silent”,
+        "Play Level" : “Low, more active than playful, Treats, lap time”,
+        "Image Prompt" : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot cat) (glowing eyes)(glowing chest)(thick healthy fur) (Glowing pet collar) Russian Blue with Blue-gray smooth shorthair, curled up in a lap "
+        }
+
+12. Dirk Thuderpaw the Maine Coon with Brown Stripes
+	{'Dirk Thunderpaw':{
+        "Name" : "Dirk Thunderpaw",
+        "Breed" : “Maine Coon”,
+        "Pet Species" : "Cat",
+        "Fur" : “Brown stripes, white face, dense longhair”,
+        "Intelligence Level" : “Medium, trainable”,
+        "Affection Level" : “Medium, affectionate with most people”,
+        "Energy Level" : “Low, will spring to alertness”,
+        "Noise Level" : “Low, rarely meows”,
+        "Play Level" : “Medium, more interested in training, Hunting”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot cat) (glowing eyes)(glowing chest)(thick healthy fur) (Glowing pet collar) Maine Coon Brown stripes, white face, dense longhair hunting a toy "
+        }
+
+13. Scrambles Mcgee, Esquire the Gray Persian With Thick Longhair
+
+	{'Scrambles McGee Esquire':{
+        "Name" : "Scrambles McGee Esquire",
+        "Breed" : “Persian,
+        "Pet Species" : "Cat",
+        "Fur" : “Gray, thick longhair”,
+        "Intelligence Level" : “Low, not interested in training”,
+        "Affection Level" : “Low, very selectively affectionate”,
+        "Energy Level" : “Low, very lazy”,
+        "Noise Level" : “High, frequent meows”,
+        "Play Level" : “Low, very lazy, Naps, lap time, treats”,
+        "Image Prompt"  : "An elegant masterpiece drawing of a ( beautiful subtle nuanced glowing biomimicry bionic robot cat) (glowing eyes)(glowing chest)(thick healthy fur) (Glowing pet collar) Persian Gray with thick longhair, very lazy napping  "
+            }	
 """

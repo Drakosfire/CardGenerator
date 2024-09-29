@@ -3,6 +3,7 @@ from PIL import Image, ImageFilter
 import utilities as u
 import ast
 from urllib.request import urlopen
+import urllib.parse
 
 def save_image(image,item_key):
     image.save(f"{item_key['Name']}.png")
@@ -12,15 +13,15 @@ def save_image(image,item_key):
 #shop_inventory = inv.inventory
 #purchased_item_key = shop_inventory['Shortsword']
 #border_path = './card_templates/Shining Sunset Border.png'
-base_path = "https://media.githubusercontent.com/media/Drakosfire/CardGenerator/main/card_parts/"
-value_overlay_path = f"{base_path}Value_box_transparent.png"
+base_path = "https://media.githubusercontent.com/media/Drakosfire/CardGenerator/refs/heads/pet-generator/card_parts/"
+# value_overlay_path = f"{base_path}Value_box_transparent.png"
 test_item = {'Name': 'Pustulent Raspberry', 'Type': 'Fruit', 'Value': '1 cp', 'Properties': ['Unusual Appearance', 'Rare Taste'], 'Weight': '0.2 lb', 'Description': 'This small fruit has a pustulent appearance, with bumps and irregular shapes covering its surface. Its vibrant colors and strange texture make it an oddity among other fruits.', 'Quote': 'A fruit that defies expectations, as sweet and sour as life itself.', 'SD Prompt': 'A small fruit with vibrant colors and irregular shapes, bumps covering its surface.'}
-sticker_path_dictionary = {'Default': f"{base_path}Sizzek Sticker.png",
-                            'Common': f"{base_path}Common.png",
-                            'Uncommon': f"{base_path}Uncommon.png",
-                            'Rare': f"{base_path}Rare.png",
-                            'Very Rare':f"{base_path}Very Rare.png",
-                            'Legendary':f"{base_path}Legendary.png"}
+sticker_path_dictionary = {'Default': urllib.parse.urljoin(base_path, urllib.parse.quote("Sizzek Sticker.png")),
+                            'Common': urllib.parse.urljoin(base_path, urllib.parse.quote("Common.png")),
+                            'Uncommon': urllib.parse.urljoin(base_path, urllib.parse.quote("Uncommon.png")),
+                            'Rare': urllib.parse.urljoin(base_path, urllib.parse.quote("Rare.png")),
+                            'Very Rare':urllib.parse.urljoin(base_path, urllib.parse.quote("Very Rare.png")),
+                            'Legendary':urllib.parse.urljoin(base_path, urllib.parse.quote("Legendary.png"))}
 
 
 # Function that takes in an image url and a dictionary and uses the values to print onto a card.
@@ -49,20 +50,19 @@ def paste_image_and_resize(base_image,sticker_path, x_position, y_position,img_w
     # Paste the resized image onto the base image
     base_image.paste(image_to_paste_resized, paste_position, image_to_paste_resized)
 
-def render_text_on_card(image_path, item_name,
-                                    item_type,
-                                    item_rarity,
-                                    item_value,
-                                    item_properties,
-                                    item_damage,
-                                    item_weight,
-                                    item_description,
-                                    item_quote) : 
+def render_text_on_card(image_path, pet_name,
+                                    pet_species,
+                                    pet_breed,
+                                    pet_fur,
+                                    pet_intelligence,
+                                    pet_affection,
+                                    pet_energy,
+                                    pet_noise,
+                                    pet_play) : 
     # Card Properties 
     image_list = []
-    item_properties = ast.literal_eval(item_properties)
-    item_properties = '\n'.join(item_properties)
-    output_image_path = f"./{item_name}.png"
+    pet_properties = f"Intelligence : {pet_intelligence} \n Affection : {pet_affection} \n Energy : {pet_energy} \n Noise : {pet_noise} \n Play : {pet_play}"
+    output_image_path = f"./{pet_name}.png"
     print(f"Saving image to {output_image_path}")
     font_path = "./fonts/Balgruf.ttf"
     italics_font_path = './fonts/BalgrufItalic.ttf'
@@ -77,12 +77,7 @@ def render_text_on_card(image_path, item_name,
     type_center_position = (384, 545)
     type_area_width = 600 
     type_area_height = 45 
-    type_text = item_type
-    if len(item_weight) >= 1: 
-        type_text = type_text + ' '+ item_weight
-
-    if len(item_damage) >= 1 : 
-        type_text = type_text + ' '+ item_damage
+    type_text = f"{pet_breed} Color and Fur : {pet_fur}"    
 
     # Description box properties
     description_position = (105, 630)
@@ -101,24 +96,22 @@ def render_text_on_card(image_path, item_name,
 
     # open image and render text
     image = u.open_image_from_url(image_path)
-    image = rend.render_text_with_dynamic_spacing(image, item_name, title_center_position, title_area_width, title_area_height,font_path,initial_font_size)
+    image = rend.render_text_with_dynamic_spacing(image, pet_name, title_center_position, title_area_width, title_area_height,font_path,initial_font_size)
     image = rend.render_text_with_dynamic_spacing(image,type_text , type_center_position, type_area_width, type_area_height,font_path,initial_font_size)
-    image = rend.render_text_with_dynamic_spacing(image, item_description + '\n\n' + item_properties, description_position, description_area_width, description_area_height,font_path,initial_font_size, description = True)
-    #Paste value overlay
-    paste_image_and_resize(image, value_overlay_path,x_position= 0,y_position=0, img_width= 768, img_height= 1024)
-    image = rend.render_text_with_dynamic_spacing(image, item_value, value_position, value_area_width, value_area_height,font_path,initial_font_size)
-    image = rend.render_text_with_dynamic_spacing(image, item_quote, quote_position, quote_area_width, quote_area_height,italics_font_path,initial_font_size, quote = True)
+    image = rend.render_text_with_dynamic_spacing(image, pet_properties, description_position, description_area_width, description_area_height,font_path,initial_font_size, description = True)
+    # paste_image_and_resize(image, value_overlay_path,x_position= 0,y_position=0, img_width= 768, img_height= 1024)
     #Paste Sizzek Sticker
-    paste_image_and_resize(image, sticker_path_dictionary,x_position= 0,y_position=909, img_width= 115, img_height= 115, purchased_item_key= item_rarity)
+    paste_image_and_resize(image, sticker_path_dictionary['Default'],x_position= 0,y_position=909, img_width= 115, img_height= 115, purchased_item_key= None)
 
     # Add blur, gives it a less artificial look, put into list and return the list since gallery requires lists
     image = image.filter(ImageFilter.GaussianBlur(.5))
     image_list.append(image)
    
-    return image_list
+    image = image.save(f"./output/{pet_name}.png")
+    
     
 
-
+    return image_list
 
 
 

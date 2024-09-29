@@ -38,23 +38,9 @@ def user_pick_item(user_prompt,list_of_items):
 def call_llm(user_input):
     # Process the query and get the response
     llm_call = igen.call_llm_and_cleanup(user_input)
-    response = llm_call
-        
-        # Find the index of the phrase
-    index = response.find(end_phrase)
-    print(f"index = {index}")
-    if index != -1:
-        # Slice the string from the end of the phrase onwards
-        response = response[index + len(end_phrase):]
-    else:
-        # Phrase not found, optional handling
-        response = response
-    
-    response = response.replace("GPT4 Assistant: ", "")
-    print(response)
-    response = igen.convert_to_dict(response)
-    if not response:
-        response = call_llm(user_input)
+    response = u.string_to_dict(llm_call)
+    print(f"response = {response}")
+
     del llm_call
     return response
 

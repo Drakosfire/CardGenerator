@@ -4,34 +4,33 @@ emoji: 🃏
 colorFrom: yellow
 colorTo: purple
 sdk: gradio
-sdk_version: 4.26.0
+sdk_version: 4.44.0
 app_file: app.py
 pinned: false
 ---
 
-# Drakosfire's Dungeons and Dragons Item Card Generator
+# Drakosfire's Cyber Pet Card Generator
 
-Welcome to the Drakosfire's Dungeons and Dragons Item Card Generator! This innovative tool harnesses the power of AI to generate unique item cards for your D&D adventures. 
+This is a tool built to generate custom cyborg pets for an unnanounced creative project.
 
 ## Overview
 
-This generator leverages an API call to [Replicate](https://replicate.com/) using Llama 3 70b, combined with a custom fine-tuned version of the Stable Diffusion SDXL model. You can find more about the specific modelthis project was based on at [Civitai](https://civitai.com/models/129681/sdxl-faetastic).
+This generator leverages an API call to FAL.ai to generate images with a custom LoRA trained off of my card dataset as well as OpenAI's GPT-4o to generate text and image prompts for the images.
 
 ## Key Features
 
-- **Custom Fine-Tuning**: The backbone of this generator is a fine-tuned Stable Diffusion SDXL model, specifically optimized for generating high-quality, fantasy-themed images on a unique card border that is themed by your imagination.
+- **Custom Fine-Tuning**: The backbone of this generator is a fine-tuned Flux.1 model, specifically optimized for generating high-quality, pet images on a unique card border that is flavored by your imagination.
 
-- **Consistent Card Design**: To ensure each card maintains a uniform appearance, a LoRA (Locally Optimized Representation Approximation) technique was used. This involved training the model with a hand-crafted dataset of card border images, enabling the system to generate new cards with consistent text and image spaces where the generated text and images can be elegantly integrated.
+- **Consistent Card Design**: To ensure each card maintains a uniform appearance, a LoRA (Low-Rank Adaptation) technique was used. This involved training the model with a hand-crafted dataset of card border images, enabling the system to generate new cards with consistent text and image spaces where the generated text and images can be elegantly integrated.
 
 ## How It Works
 
-1. Your intitial text along with the prompt is sent to Llama 3 70b to generate a python dictionary.
-2. This new text will populate in interactive text fields. If it isn't perfect you can edit the text to fit your item.
-3. The final text field is the Stable Diffusion prompt, these generate like one sentence stories describing the scene of your item. This field can also be edited.
-## The first image generation take about 2 minutes for model to 'cold boot' after that it's ~10s per image.
-4. **Image and Text Generation**: Now generate 4 card template without text and pick your favorite.
-5. Finally, add text to your favorite template.
-3. **Result**: The final product is a beautifully crafted D&D item card, ready for use in your gaming sessions.
+1. Your intitial text along with the prompt is sent to OpenAI's GPT-4o to generate a JSON.
+2. This JSON will be parsed into textboxes to review and edit. 
+3. The final text field is the image prompt, these generate like one sentence stories describing the scene of your pet.
+4. **Image and Text Generation**: Now generate 4 blank cards in about 15 seconds.
+5. Finally, click the add text button to add text to your favorite template.
+3. **Result**: The final product is a beautifully crafted collectible pet card.
 
 ## Example Cards
 
@@ -44,4 +43,4 @@ Below are a few examples of the item cards I've generated:
 ![Ridiculously Cute Kitten](https://cdn-lfs-us-1.huggingface.co/repos/cb/b4/cbb436e53a2021c9535cec40c6360a89a1d6f5e42bc18d88bbd2da335dde82bd/863ef9235c94e60fd7176db237e3939f67c6a22bce3015712ff2336a49065f83?response-content-disposition=inline%3B+filename*%3DUTF-8%27%27Ridiculouslycutekitten.png%3B+filename%3D%22Ridiculouslycutekitten.png%22%3B&response-content-type=image%2Fpng&Expires=1714445494&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTcxNDQ0NTQ5NH19LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2RuLWxmcy11cy0xLmh1Z2dpbmdmYWNlLmNvL3JlcG9zL2NiL2I0L2NiYjQzNmU1M2EyMDIxYzk1MzVjZWM0MGM2MzYwYTg5YTFkNmY1ZTQyYmMxOGQ4OGJiZDJkYTMzNWRkZTgyYmQvODYzZWY5MjM1Yzk0ZTYwZmQ3MTc2ZGIyMzdlMzkzOWY2N2M2YTIyYmNlMzAxNTcxMmZmMjMzNmE0OTA2NWY4Mz9yZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPSomcmVzcG9uc2UtY29udGVudC10eXBlPSoifV19&Signature=Awm-rIF7be1FRdKIU2zR-cxZa3KtR7FcYmPgVTqfaa2oMKZhU2vkG3lLHXimFvVuXbiv8Rd4ZnijffjWyEBWs6FV5L2JFQ2jG%7EDhlBIdWj-6skbvYwgxsbAfDclBbBv3zyZs%7EDK0rzEqvIDdd8Avud9NtXvyMpSFZTx2zUzGMp1saHLaYH2uU91z7zWHLhnL0XVW1JvY6RbaNx0Ydtx42r1IWqVpLqpB6yGoeIU2PBQCpNiuY61zwjOCg2iMM3OuXJ56eULFXtnrbJbqDSZnlIibELCZ%7EJQCozeVSvi-OK6HOkD7W7tPSnbfx2f9GIY1FkmzoXh-K7cFNL-CxYnCjw__&Key-Pair-Id=KCD77M1F0VK2B)
 
 
-We hope you enjoy enhancing your Dungeons and Dragons experience with this unique tool. Happy adventuring!
+

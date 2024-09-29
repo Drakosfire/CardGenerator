@@ -8,6 +8,10 @@ from github import Github
 image_list = []
 # Utility Functions to be called from all modules
 
+# Function to convert a string to a dictionary
+def string_to_dict(string):
+    return eval(string)
+
 # Function to return a list of keys of a nested dictionary using it's key value (item or creature)
 def keys_list(dict, index):
     keys_list=list(dict.keys())

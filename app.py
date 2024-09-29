@@ -13,28 +13,28 @@ with gr.Blocks() as demo:
     # Functions and State Variables
     # Build functions W/in the Gradio format, because it only allows modification within it's context
     # Define inputs to match what is called on click, and output of the function as a list that matches the list of outputs
-    textbox_default_dict = {'Name':'', \
-                            'Type': '',
-                            'Rarity':'',
-                            'Value':'',
-                            'Properties':'',
-                            'Damage':'',
-                            'Weight':'',
-                            'Description':'',
-                            'Quote':'',
-                            'SD Prompt':''
+    textbox_default_dict = {'Name':'', 
+                            'Pet Species': '',
+                            'Breed':'',
+                            'Fur':'',
+                            'Intelligence Level':'',
+                            'Affection Level':'',
+                            'Energy Level':'',
+                            'Noise Level':'',
+                            'Play Level':'',
+                            'image Prompt':''
                             }
-    
-    item_name_var = gr.State()
-    item_type_var = gr.State()
-    item_rarity_var = gr.State()
-    item_value_var = gr.State()
-    item_properties_var = gr.State()
-    item_damage_var = gr.State()
-    item_weight_var = gr.State()
-    item_description_var = gr.State()
-    item_quote_var = gr.State()
-    item_sd_prompt_var = gr.State('')
+    # Text states
+    pet_name_state = gr.State()
+    pet_species_state = gr.State()
+    pet_breed_state = gr.State()
+    pet_fur_state = gr.State()
+    pet_intelligence_level_state = gr.State()
+    pet_affection_level_state = gr.State()
+    pet_energy_level_state = gr.State()
+    pet_noise_level_state = gr.State()
+    pet_play_level_state = gr.State()
+    image_prompt_var = gr.State('')
 
     selected_border_image = gr.State('./card_templates/Moonstone Border.png')
     num_image_to_generate = gr.State(4)
@@ -53,37 +53,27 @@ with gr.Blocks() as demo:
     def generate_text_update_textboxes(user_input):
         
         llm_output=useri.call_llm(user_input)
-        item_key = list(llm_output.keys())
-        
-        item_key_values = list(llm_output[item_key[0]].keys())
-        item_name = llm_output[item_key[0]]['Name']
-        item_type = llm_output[item_key[0]]['Type']
-        item_rarity = llm_output[item_key[0]]['Rarity']            
-        item_value = llm_output[item_key[0]]['Value']
-        item_properties = llm_output[item_key[0]]['Properties']
-        
-        if 'Damage' in item_key_values: 
-            item_damage = llm_output[item_key[0]]['Damage']
-        else: item_damage = ''
-
-
-        item_weight = llm_output[item_key[0]]['Weight']
-        item_description = llm_output[item_key[0]]['Description']
-        item_quote = llm_output[item_key[0]]['Quote']
-        item_quote = llm_output[item_key[0]]['Quote']
-        sd_prompt = llm_output[item_key[0]]['SD Prompt']
-
-
-        return [item_name, item_name,
-                item_type, item_type,
-                item_rarity, item_rarity,
-                item_value, item_value,
-                item_properties, item_properties,
-                item_damage, item_damage,
-                item_weight, item_weight,
-                item_description, item_description,
-                item_quote, item_quote,
-                sd_prompt, sd_prompt]
+        pet_key = list(llm_output.keys())
+        pet_name = llm_output[pet_key[0]]['Name']
+        pet_species = llm_output[pet_key[0]]['Pet Species']
+        pet_breed = llm_output[pet_key[0]]['Breed']            
+        pet_fur = llm_output[pet_key[0]]['Fur']
+        pet_intelligence_level = llm_output[pet_key[0]]['Intelligence Level']
+        pet_affection_level = llm_output[pet_key[0]]['Affection Level']
+        pet_energy_level = llm_output[pet_key[0]]['Energy Level']
+        pet_noise_level = llm_output[pet_key[0]]['Noise Level']
+        pet_play_level = llm_output[pet_key[0]]['Play Level']
+        image_prompt = llm_output[pet_key[0]]['Image Prompt']
+        return [pet_name, pet_name,
+                    pet_species, pet_species,
+                    pet_breed, pet_breed,
+                    pet_fur, pet_fur,
+                    pet_intelligence_level, pet_intelligence_level,
+                    pet_affection_level, pet_affection_level,
+                    pet_energy_level, pet_energy_level,
+                    pet_noise_level, pet_noise_level,
+                    pet_play_level, pet_play_level,
+                    image_prompt, image_prompt]
     
     # Called on user selecting an image from the gallery, outputs the path of the image
     def assign_img_path(evt: gr.SelectData):          
@@ -102,18 +92,9 @@ with gr.Blocks() as demo:
     # Called when pressing button to generate image, updates gallery by returning the list of image URLs
     def generate_image_update_gallery(num_img, sd_prompt,item_name, built_template):
         delete_temp_images()
+        print(f"num_img is a {type(num_img)}")
         print(f"sd_prompt is a {type(sd_prompt)}")
-        image_list = []
-        
-        
-        for x in range(num_img):
-            preview = img2img.preview_and_generate_image(x,sd_prompt, built_template, item_name)
-            image_list.append(preview)
-            yield image_list
-            
-        del preview
-       
-        #generated_image_list = img2img.generate_image(num_img,sd_prompt,item_name,selected_border)
+        image_list = img2img.preview_and_generate_image(4,sd_prompt, built_template)
         return image_list
     
     def build_template(selected_border, selected_seed_image):
@@ -201,10 +182,10 @@ with gr.Blocks() as demo:
     build_card_template_button.click(build_template, inputs = [selected_border_image, selected_seed_image], outputs = [built_template_gallery, built_template]) 
         
     gr.HTML(""" <div id="inner"> <header>
-                    <h2><b>Second:</b> Generate Item Text </h2>
+                    <h2><b>Second:</b> Generate Pet Text </h2>
                    </div>""")  
     gr.HTML(""" <div id="inner"> <header>
-                        <h3>1. Use a few words to describe the item then click 'Generate Text' </h3>
+                        <h3>1. Use a name, a breed, some coloring and the animal type, Ex: 'Hermione the Stormy Grey English Shorthair Cat' then click 'Generate Text' </h3>
                         </div>""")
     with gr.Row():
         user_input =  gr.Textbox(label = 'Item', lines =1, placeholder= "Flaming Magical Sword", elem_id= "Item", scale =4)
@@ -214,30 +195,43 @@ with gr.Blocks() as demo:
                 <h3> 2. Review and Edit the text</h3>
                 </div>""") 
     with gr.Row():
-
-    # Build text boxes for the broken up item dictionary values         
-
     # Build text boxes for the broken up item dictionary values         
         with gr.Column(scale = 1):
-            item_name_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Name'),label = 'Name', lines = 1, interactive=True, elem_id='Item Name')
-            item_type_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Type'),label = 'Type', lines = 1, interactive=True, elem_id='Item Type')
-            item_rarity_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Rarity'),label = 'Rarity : [Common, Uncommon, Rare, Very Rare, Legendary]', lines = 1, interactive=True, elem_id='Item Rarity')
-            item_value_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Value'),label = 'Value', lines = 1, interactive=True, elem_id='Item Value')
+            pet_name_output = gr.Textbox(value = set_textbox_defaults(
+                textbox_default_dict, 'Name'),label = 'Name', lines = 1, interactive=True, elem_id='Pet Name')
+            
+            pet_species_output = gr.Textbox(value = set_textbox_defaults(
+                textbox_default_dict, 'Pet Species'),label = 'Type', lines = 1, interactive=True, elem_id='Pet Species')
+            
+            pet_breed_output = gr.Textbox(value = set_textbox_defaults(
+                textbox_default_dict, 'Breed'),label = 'Breed : [Common, Uncommon, Rare, Very Rare, Legendary]',
+                lines = 1, interactive=True, elem_id='Pet Breed')
+            
+            pet_fur_output = gr.Textbox(value = set_textbox_defaults(
+                textbox_default_dict, 'Fur'),label = 'Fur Quality', lines = 1, interactive=True, elem_id='Pet Fur')
                         
-                # Pass the user input and border template to the generator
+    # Pass the user input and border template to the generator
         with gr.Column(scale = 1):    
-            item_damage_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Damage'),label = 'Damage', lines = 1, interactive=True, elem_id='Item Damage')
-            item_weight_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Weight'),label = 'Weight', lines = 1, interactive=True, elem_id='Item Weight')
-            item_description_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Description'),label = 'Description', lines = 1, interactive=True, elem_id='Item Description')
-            item_quote_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Quote'),label = 'Quote', lines = 1, interactive=True, elem_id='Item quote')
-    item_properties_output = gr.Textbox(value = set_textbox_defaults(textbox_default_dict, 'Properties'),label = 'Properties : [List of comma seperated values]', lines = 1, interactive=True, elem_id='Item Properties')
-    
+            pet_affection_level_output = gr.Textbox(value = set_textbox_defaults(
+                textbox_default_dict, 'Affection Level'),label = 'Affection Level', lines = 1, interactive=True, elem_id='Affection Level')
+            
+            pet_energy_level_output = gr.Textbox(value = set_textbox_defaults(
+                textbox_default_dict, 'Energy Level'),label = 'Energy Level', lines = 1, interactive=True, elem_id='Energy Level')
+            
+            pet_noise_level_output = gr.Textbox(value = set_textbox_defaults(
+                textbox_default_dict, 'Noise Level'),label = 'Noise Level', lines = 1, interactive=True, elem_id='Noise Level')
+            
+            pet_play_level_output = gr.Textbox(value = set_textbox_defaults(
+                textbox_default_dict, 'Play Level'),label = 'Play Level', lines = 1, interactive=True, elem_id='Play Level')
+            
+            pet_intelligence_level_output = gr.Textbox(value = set_textbox_defaults(
+                textbox_default_dict, 'Intelligence Level'),label = 'Intelligence Level',
+                lines = 1, interactive=True, elem_id='Intelligence Level')
     
     gr.HTML(""" <div id="inner"> <header>
                 <h3> 3. This text will be used to generate the card's image.</h3>
                 </div>""") 
-    item_sd_prompt_output = gr.Textbox(label = 'Putting words or phrases in parenthesis adds weight. Example: (Flaming Magical :1.0) Sword.', value = set_textbox_defaults(textbox_default_dict, 'SD Prompt'), lines = 1, interactive=True, elem_id='SD Prompt')
-         
+    image_prompt_output = gr.Textbox(label = 'Putting words or phrases in parenthesis adds weight. Example: (Flaming Magical :1.0) Sword.', value = set_textbox_defaults(textbox_default_dict, 'image Prompt'), lines = 1, interactive=True, elem_id='image Prompt')         
     gr.HTML(""" <div id="inner"> <header>
                 <h2> <b>Third:</b> Click 'Generate Cards' to generate 4 cards to choose from. \n First image from a cold boot takes about 2 minutes. \n After that it's 10 seconds per image. </h2>
                 </div>""")          
@@ -261,51 +255,46 @@ with gr.Blocks() as demo:
                                     elem_id = "Generated Cards Gallery",
                                     allow_preview=True
                                     )
-        
     
-    
-    card_gen_button.click(fn = generate_image_update_gallery,
-                           inputs =[num_image_to_generate,item_sd_prompt_output,item_name_output,
-                                    built_template_gallery], outputs= generate_gallery,
-                                    show_progress=True)
+    card_gen_button.click(fn = generate_image_update_gallery, inputs =[num_image_to_generate,image_prompt_output,pet_name_output,built_template], outputs= generate_gallery)
     generate_gallery.select(assign_img_path, outputs = selected_generated_image)
 
         # Button logice calls function when button object is pressed, passing inputs and passing output to components
     llm_output = item_text_generate.click(generate_text_update_textboxes, 
                                                 inputs = [user_input], 
-                                                outputs= [item_name_var, 
-                                                        item_name_output,
-                                                        item_type_var,
-                                                        item_type_output, 
-                                                        item_rarity_var,
-                                                        item_rarity_output,
-                                                        item_value_var,
-                                                        item_value_output,
-                                                        item_properties_var,
-                                                        item_properties_output,
-                                                        item_damage_var,
-                                                        item_damage_output,
-                                                        item_weight_var,
-                                                        item_weight_output,
-                                                        item_description_var,
-                                                        item_description_output,
-                                                        item_quote_var,
-                                                        item_quote_output,                                                     
-                                                        item_sd_prompt_var,
-                                                        item_sd_prompt_output])          
+                                                outputs= [pet_name_state, 
+                                                        pet_name_output,
+                                                        pet_species_state,
+                                                        pet_species_output, 
+                                                        pet_breed_state,
+                                                        pet_breed_output,
+                                                        pet_fur_state,
+                                                        pet_fur_output,
+                                                        pet_intelligence_level_state,
+                                                        pet_intelligence_level_output,
+                                                        pet_affection_level_state,
+                                                        pet_affection_level_output,
+                                                        pet_energy_level_state,
+                                                        pet_energy_level_output,
+                                                        pet_noise_level_state,
+                                                        pet_noise_level_output,
+                                                        pet_play_level_state,
+                                                        pet_play_level_output,                                                     
+                                                        image_prompt_var,
+                                                        image_prompt_output])           
         
         
     generate_final_item_card.click(card.render_text_on_card, inputs = [selected_generated_image,
-                                                                        item_name_output, 
-                                                                        item_type_output, 
-                                                                        item_rarity_output, 
-                                                                        item_value_output,
-                                                                        item_properties_output, 
-                                                                        item_damage_output,
-                                                                        item_weight_output,
-                                                                        item_description_output,
-                                                                        item_quote_output
-                                                                        ], 
+                                                                        pet_name_output, 
+                                                                        pet_species_output, 
+                                                                        pet_breed_output, 
+                                                                        pet_fur_output,
+                                                                        pet_intelligence_level_output, 
+                                                                        pet_affection_level_output,
+                                                                        pet_energy_level_output,
+                                                                        pet_noise_level_output,
+                                                                        pet_play_level_output
+                                                                        ],
                                                                         outputs = generate_gallery )
     base_dir = os.path.dirname(os.path.abspath(__file__))  # Gets the directory where the script is located
     print(f"Base Directory :",base_dir)
