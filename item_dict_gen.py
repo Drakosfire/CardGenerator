@@ -68,9 +68,6 @@ pet_prompt_instructions = """ **Purpose**: ONLY Generate a structured json follo
 - **Input Placeholder**:
     - "{pet}": Replace with the pet name, ensuring it's wrapped in single quotes.
     
-    - "{pet}": Replace with the pet name, ensuring it's wrapped in single quotes.
-    
-
 **Output Examples**:
 1. Mignon the Toy Sized Chihuahua 
 

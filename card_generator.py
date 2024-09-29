@@ -59,19 +59,9 @@ def render_text_on_card(image_path, pet_name,
                                     pet_energy,
                                     pet_noise,
                                     pet_play) : 
-def render_text_on_card(image_path, pet_name,
-                                    pet_species,
-                                    pet_breed,
-                                    pet_fur,
-                                    pet_intelligence,
-                                    pet_affection,
-                                    pet_energy,
-                                    pet_noise,
-                                    pet_play) : 
+
     # Card Properties 
     image_list = []
-    pet_properties = f"Intelligence : {pet_intelligence} \n Affection : {pet_affection} \n Energy : {pet_energy} \n Noise : {pet_noise} \n Play : {pet_play}"
-    output_image_path = f"./{pet_name}.png"
     pet_properties = f"Intelligence : {pet_intelligence} \n Affection : {pet_affection} \n Energy : {pet_energy} \n Noise : {pet_noise} \n Play : {pet_play}"
     output_image_path = f"./{pet_name}.png"
     print(f"Saving image to {output_image_path}")
@@ -109,19 +99,16 @@ def render_text_on_card(image_path, pet_name,
     # open image and render text
     image = u.open_image_from_url(image_path)
     image = rend.render_text_with_dynamic_spacing(image, pet_name, title_center_position, title_area_width, title_area_height,font_path,initial_font_size)
-    image = rend.render_text_with_dynamic_spacing(image, pet_name, title_center_position, title_area_width, title_area_height,font_path,initial_font_size)
     image = rend.render_text_with_dynamic_spacing(image,type_text , type_center_position, type_area_width, type_area_height,font_path,initial_font_size)
     image = rend.render_text_with_dynamic_spacing(image, pet_properties, description_position, description_area_width, description_area_height,font_path,initial_font_size, description = True)
     # paste_image_and_resize(image, value_overlay_path,x_position= 0,y_position=0, img_width= 768, img_height= 1024)
     #Paste Sizzek Sticker
-    paste_image_and_resize(image, sticker_path_dictionary['Default'],x_position= 0,y_position=909, img_width= 115, img_height= 115, purchased_item_key= None)
     paste_image_and_resize(image, sticker_path_dictionary['Default'],x_position= 0,y_position=909, img_width= 115, img_height= 115, purchased_item_key= None)
 
     # Add blur, gives it a less artificial look, put into list and return the list since gallery requires lists
     image = image.filter(ImageFilter.GaussianBlur(.5))
     image_list.append(image)
    
-    image = image.save(f"./output/{pet_name}.png")
     image = image.save(f"./output/{pet_name}.png")
     
     

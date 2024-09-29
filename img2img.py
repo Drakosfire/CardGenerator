@@ -26,7 +26,7 @@ def preview_and_generate_image(num_images, sd_prompt, user_input_template):
     print(f"sd_prompt: {sd_prompt}")
     print(f"user_input_template: {user_input_template}")
     num_images = int(4)
-    sd_prompt = f"magnum opus, blank card, no text, blank textboxes, detailed high quality animal properties borders, {sd_prompt}"
+    sd_prompt = f"magnum opus, blank card, no text, blank textbox at top for title, mid for details and bottom for description, detailed high quality animal properties borders, {sd_prompt}"
     try:
         # Save the image to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
