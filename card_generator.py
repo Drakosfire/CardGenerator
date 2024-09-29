@@ -108,8 +108,8 @@ def render_text_on_card(image_path, pet_name,
     # Add blur, gives it a less artificial look, put into list and return the list since gallery requires lists
     image = image.filter(ImageFilter.GaussianBlur(.5))
     image_list.append(image)
-   
-    image = image.save(f"./output/{pet_name}.png")
+#    Can't save on remote deployment to Huggingface in current setup
+    # image = image.save(f"./output/{pet_name}.png")
     
     
 
