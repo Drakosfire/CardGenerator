@@ -1,7 +1,5 @@
-torch
-replicate
+fal-client
 PyGithub
 pillow
 openai
-sentence_transformers
 gradio
