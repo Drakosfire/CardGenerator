@@ -41,28 +41,44 @@ def paste_image_and_resize(base_image,sticker, x_position, y_position,img_width,
 
 def build_card_template(selected_border, selected_seed_image):
     selected_border = u.open_image_from_url(selected_border)
+    print(f"Selected Border is : {selected_border}")
     if type(selected_seed_image) == str:      
         print(f"String : {selected_seed_image}")      
         selected_seed_image = u.open_image_from_url(selected_seed_image)
     
-    mask = selected_border.split()[3]
-    
-    image_list = []
+    # Convert palette-based images to RGBA
+    if selected_border.mode == 'P':
+        selected_border = selected_border.convert('RGBA')
+        print("Converted palette-based image to RGBA.")
 
-    # Image size parameters
+    # Resize the border to match the canvas size
     width = 768
     height = 1024
+    selected_border = selected_border.resize((width, height))
+
+    # Check if the image has an alpha channel
+    if selected_border.mode == 'RGBA':
+        mask = selected_border.split()[3]
+    else:
+        mask = None
+        print("Warning: Selected border does not have an alpha channel.")
+
+    image_list = []
 
     # Set canvas as transparent
-
     background_color = (0,0,0,0)
 
-    #initialize canvas
+    # Initialize canvas
     canvas = Image.new('RGB', (width, height), background_color)
     
-    canvas = paste_image_and_resize(canvas, selected_seed_image,seed_x,seed_y, seed_width, seed_height)
+    canvas = paste_image_and_resize(canvas, selected_seed_image, seed_x, seed_y, seed_width, seed_height)
     
-    canvas.paste(selected_border,(0,0), mask = mask)
+    # Use the mask only if it exists
+    if mask:
+        canvas.paste(selected_border, (0, 0), mask=mask)
+    else:
+        canvas.paste(selected_border, (0, 0))
+
     print(f"Canvas is : {canvas}")
     print(f"Canvas is : {type(canvas)}")
 

@@ -4,7 +4,11 @@ cuda_12.4.0_550.54.14_linux.run
 models/
 blobs-ids.txt
 
+# Python Cache
+__pycache__/
 
+# Environment variables 
+.env
 
 # Python Cache
 __pycache__/
