@@ -27,11 +27,18 @@ def preview_and_generate_image(num_images, sd_prompt, user_input_template):
     print(f"user_input_template: {user_input_template}")
     num_images = int(4)
     sd_prompt = f"magnum opus, blank card, no text, blank textbox at top for title, mid for details and bottom for description, detailed high quality thematic borders, {sd_prompt}"
+    if not user_input_template or not isinstance(user_input_template, list) or len(user_input_template) == 0:
+        logger.error("user_input_template is None, not a list, or empty.")
+        return []
+
     try:
-        # Save the image to a temporary file
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
-            user_input_template[0].save(temp_file.name, format="PNG")
-            temp_path = temp_file.name
+        # Load the image from the file path in the tuple
+        image_path = user_input_template[0][0]
+        with Image.open(image_path) as img:
+            # Save the image to a temporary file
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_file:
+                img.save(temp_file.name, format="PNG")
+                temp_path = temp_file.name
 
         logger.info(f"Image saved to temporary file: {temp_path}")
 

@@ -37,7 +37,6 @@ with gr.Blocks() as demo:
     item_sd_prompt_var = gr.State('')
 
     selected_border_image = gr.State('./card_templates/Moonstone Border.png')
-    num_image_to_generate = gr.State(4)
     generated_image_list = gr.State([])
     selected_generated_image = gr.State()
     selected_seed_image = gr.State()
@@ -100,18 +99,13 @@ with gr.Blocks() as demo:
         u.image_list.clear()
     
     # Called when pressing button to generate image, updates gallery by returning the list of image URLs
-    def generate_image_update_gallery(num_img, sd_prompt,item_name, built_template):
+    def generate_image_update_gallery(sd_prompt, built_template):
         delete_temp_images()
         print(f"sd_prompt is a {type(sd_prompt)}")
         image_list = []
         
         
-        for x in range(num_img):
-            preview = img2img.preview_and_generate_image(x,sd_prompt, built_template, item_name)
-            image_list.append(preview)
-            yield image_list
-            
-        del preview
+        image_list = img2img.preview_and_generate_image(4,sd_prompt, built_template)
        
         #generated_image_list = img2img.generate_image(num_img,sd_prompt,item_name,selected_border)
         return image_list
@@ -162,7 +156,7 @@ with gr.Blocks() as demo:
         
         border_gallery = gr.Gallery(label = "Card Template Gallery", 
                                         scale = 2,
-                                        value = u.index_image_paths("Drakosfire/CardGenerator", "seed_images/card_templates"),
+                                        value = u.card_border_urls,
                                         show_label = True,
                                         columns = [3], rows = [3],
                                         object_fit = "contain",
@@ -172,9 +166,9 @@ with gr.Blocks() as demo:
         
         
         border_gallery.select(assign_img_path, outputs = selected_border_image)
-        seed_image_gallery = gr.Gallery(label= " Image Seed Gallery",
+        seed_image_gallery = gr.Gallery(label= "Image Seed Gallery",
                                         scale = 2,
-                                        value = u.index_image_paths("Drakosfire/CardGenerator", "seed_images/item_seeds"),
+                                        value = u.example_image_urls,
                                         show_label = True,
                                         columns = [3], rows = [3],
                                         object_fit = "contain",
@@ -185,11 +179,11 @@ with gr.Blocks() as demo:
     
     
     built_template_gallery = gr.Gallery(label= "Generated Template Gallery",
-                                        scale = 1,
+                                        
                                         value = None,
                                         show_label = True,
                                         columns = [1], rows = [1],
-                                        object_fit = "contain",
+                                        object_fit = "fill",
                                         height = None,
                                         elem_id = "Template Gallery",
                                         interactive=True,
@@ -265,8 +259,9 @@ with gr.Blocks() as demo:
     
     
     card_gen_button.click(fn = generate_image_update_gallery,
-                           inputs =[num_image_to_generate,item_sd_prompt_output,item_name_output,
-                                    built_template_gallery], outputs= generate_gallery,
+                           inputs =[item_sd_prompt_output,
+                                    built_template_gallery], 
+                                    outputs= generate_gallery,
                                     show_progress=True)
     generate_gallery.select(assign_img_path, outputs = selected_generated_image)
 
