@@ -3,6 +3,7 @@ from PIL import Image, ImageFilter
 import utilities as u
 import ast
 from urllib.request import urlopen
+import urllib.request
 
 def save_image(image,item_key):
     image.save(f"{item_key['Name']}.png")
@@ -15,36 +16,41 @@ def save_image(image,item_key):
 base_path = "https://media.githubusercontent.com/media/Drakosfire/CardGenerator/main/card_parts/"
 value_overlay_path = f"{base_path}Value_box_transparent.png"
 test_item = {'Name': 'Pustulent Raspberry', 'Type': 'Fruit', 'Value': '1 cp', 'Properties': ['Unusual Appearance', 'Rare Taste'], 'Weight': '0.2 lb', 'Description': 'This small fruit has a pustulent appearance, with bumps and irregular shapes covering its surface. Its vibrant colors and strange texture make it an oddity among other fruits.', 'Quote': 'A fruit that defies expectations, as sweet and sour as life itself.', 'SD Prompt': 'A small fruit with vibrant colors and irregular shapes, bumps covering its surface.'}
-sticker_path_dictionary = {'Default': f"{base_path}Sizzek Sticker.png",
-                            'Common': f"{base_path}Common.png",
-                            'Uncommon': f"{base_path}Uncommon.png",
-                            'Rare': f"{base_path}Rare.png",
-                            'Very Rare':f"{base_path}Very Rare.png",
-                            'Legendary':f"{base_path}Legendary.png"}
+sticker_path_dictionary = {'Default': "https://imagedelivery.net/SahcvrNe_-ej4lTB6vsAZA/451a66ad-5116-4649-137b-aed784e5c700/public",
+                            'Common': "https://imagedelivery.net/SahcvrNe_-ej4lTB6vsAZA/8b579f17-7f92-4a0a-e891-e8990be9e400/public",
+                            'Uncommon': "https://imagedelivery.net/SahcvrNe_-ej4lTB6vsAZA/65889c14-dc2b-4b6a-9cbf-7d7704fba100/public",
+                            'Rare': "https://imagedelivery.net/SahcvrNe_-ej4lTB6vsAZA/dedf72a3-00b8-43cf-e95f-7b13b899d100/public",
+                            'Very Rare':"https://imagedelivery.net/SahcvrNe_-ej4lTB6vsAZA/3b452c8b-e945-448a-f461-48b99c266c00/public",
+                            'Legendary':"https://imagedelivery.net/SahcvrNe_-ej4lTB6vsAZA/2c60b814-ab4c-46ac-e479-d3a860413700/public"}
 
 
 # Function that takes in an image url and a dictionary and uses the values to print onto a card.
-def paste_image_and_resize(base_image,sticker_path, x_position, y_position,img_width, img_height, purchased_item_key = None):
-    
+def paste_image_and_resize(base_image, sticker_path, x_position, y_position, img_width, img_height, purchased_item_key=None):
     # Check for if item has a Rarity string that is in the dictionary of sticker paths
     if purchased_item_key:
-        if sticker_path[purchased_item_key]:
+        if sticker_path.get(purchased_item_key):
             sticker_path = sticker_path[purchased_item_key]
-        else: sticker_path = sticker_path['Default']
+        else:
+            sticker_path = sticker_path['Default']
+    
+    # Create a request with a User-Agent header
+    request = urllib.request.Request(sticker_path, headers={'User-Agent': 'Mozilla/5.0'})
     
     # Load the image to paste
-    
-    image_to_paste = Image.open(urlopen(sticker_path))
+    image_to_paste = Image.open(urlopen(request))
+
+    # Convert image to RGBA if not already
+    if image_to_paste.mode != 'RGBA':
+        image_to_paste = image_to_paste.convert('RGBA')
 
     # Define the new size (scale) for the image you're pasting
-    
     new_size = (img_width, img_height)
 
     # Resize the image to the new size
     image_to_paste_resized = image_to_paste.resize(new_size)
 
     # Specify the top-left corner where the resized image will be pasted
-    paste_position = (x_position, y_position)  # Replace x and y with the coordinates
+    paste_position = (x_position, y_position)
 
     # Paste the resized image onto the base image
     base_image.paste(image_to_paste_resized, paste_position, image_to_paste_resized)
