@@ -42,9 +42,14 @@ def open_image_from_url(url):
     try:
         print(f"Opening image from URL: {url}")
         response = requests.get(url)
-        response.raise_for_status()  # Raises an HTTPError for bad responses
-        if 'image' not in response.headers.get('content-type', ''):
+        response.raise_for_status()
+
+        # Skip MIME type check for Gradio-generated URLs
+        if url.startswith("http://127.0.0.1:7860/gradio_api/file="):
+            print("Gradio internal URL detected; skipping MIME type check.")
+        elif 'image' not in response.headers.get('content-type', ''):
             raise ValueError("URL does not point to an image")
+
         image_data = BytesIO(response.content)
         image = Image.open(image_data)
         return image
@@ -57,6 +62,7 @@ def open_image_from_url(url):
     except Image.UnidentifiedImageError as e:
         print(f"Cannot identify image file: {e}")
         raise
+
 
 def receive_upload(image_file):
         

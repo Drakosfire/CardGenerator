@@ -4,7 +4,10 @@ import utilities as u
 import ast
 from urllib.request import urlopen
 import urllib.request
+from urllib.parse import urlparse
 import os
+
+
 def save_image(image,item_key):
     image.save(f"{item_key['Name']}.png")
 
@@ -105,13 +108,7 @@ def render_text_on_card(image_path, item_name,
     quote_area_width = 470
     quote_area_height = 60                     
 
-    # open image and render text
-    print(f"Opening image from URL: {image_path}")
-    #Verify image is a file path
-    if os.path.exists(image_path):
-        print(f"Selected image is a file path: {image_path}")
-    else:
-        print(f"Selected image is not a file path: {image_path}")
+    
     image = u.open_image_from_url(image_path)
     image = rend.render_text_with_dynamic_spacing(image, item_name, title_center_position, title_area_width, title_area_height,font_path,initial_font_size)
     image = rend.render_text_with_dynamic_spacing(image,type_text , type_center_position, type_area_width, type_area_height,font_path,initial_font_size)
