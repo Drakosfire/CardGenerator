@@ -89,6 +89,11 @@ with gr.Blocks() as demo:
         img_dict = evt.value
         print(img_dict)
         selected_image_path = img_dict['image']['url']
+        # Check if the selected image is a file path
+        if os.path.exists(selected_image_path):
+            print(f"Selected image is a file path: {selected_image_path}")
+        else:
+            print(f"Selected image is not a file path: {selected_image_path}")
         print(selected_image_path)
         return selected_image_path   
     
@@ -265,7 +270,7 @@ with gr.Blocks() as demo:
                                     show_progress=True)
     generate_gallery.select(assign_img_path, outputs = selected_generated_image)
 
-        # Button logice calls function when button object is pressed, passing inputs and passing output to components
+        # Button logic calls function when button object is pressed, passing inputs and passing output to components
     llm_output = item_text_generate.click(generate_text_update_textboxes, 
                                                 inputs = [user_input], 
                                                 outputs= [item_name_var, 
@@ -307,6 +312,7 @@ with gr.Blocks() as demo:
     list_of_static_dir = [os.path.join(base_dir, "card_parts"), 
                         os.path.join(base_dir, "fonts"), 
                         os.path.join(base_dir, "image_temp")]
+    print(list_of_static_dir)
     gr.set_static_paths(paths=list_of_static_dir)
     
     
