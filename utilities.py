@@ -38,11 +38,34 @@ def delete_files(file_paths):
         file_paths.clear()
             
 
-def open_image_from_url(image_url):
-    response = requests.get(image_url)
-    image_data = BytesIO(response.content)
-    image = Image.open(image_data)
-    return image
+def open_image_from_url(url):
+    print(f"Opening image from URL: {url}")
+    try:
+        # Send a GET request to the URL
+        response = requests.get(url)
+        
+        # Check if the request was successful
+        response.raise_for_status()
+        
+        # Check if the content type is an image
+        if 'image' not in response.headers.get('content-type', ''):
+            raise ValueError("URL does not point to an image")
+        
+        # Open the image
+        image_data = BytesIO(response.content)
+        image = Image.open(image_data)
+        
+        return image
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Request failed: {e}")
+        raise
+    except ValueError as e:
+        print(f"Invalid image URL: {e}")
+        raise
+    except Image.UnidentifiedImageError as e:
+        print(f"Cannot identify image file: {e}")
+        raise
 
 def receive_upload(image_file):
         
