@@ -7,9 +7,7 @@ prompt_instructions = """ **Purpose**: ONLY Generate a structured inventory entr
 4. All keys and values MUST be enclosed in double quotes.
 5. Replace `{item}` with the name of the user item, DO NOT CHANGE THE USER ITEM NAME enclosed in single quotes (e.g., `'Magic Wand'`).
 6. Ensure your request is formatted as a hashmap. 
-7. The cybernetic pets are friendly and cute, they are products and toys. 
-8. The descriptions should be brief and puncy, or concise and in the voice of a judge at a high end cat or dog or pet exhibition such as the American Kennel Clube or Cat Fancier and make specific callout of how mild, and well camoflaughed the artificiality of the cybernetic pet is.
-9. The Image Prompt MUST be inside double quotations ie " ".
+7. The Image Prompt MUST be inside double quotations ie " ".
     {"{item}": {
     'Name': "{item name}",
     'Type': '{item type}',
@@ -22,12 +20,13 @@ prompt_instructions = """ **Purpose**: ONLY Generate a structured inventory entr
     'Quote': "{item quote}",
     'SD Prompt': "{special description for the item}"
     } } 
-3. Weapons MUST have a key 'Damage' 
-4. The description should be brief and puncy, or concise and thoughtful.
-5. The quote and SD Prompt MUST be inside double quotations ie " ".
-6. The quote is from the perspective of someone commenting on the impact of the {item} on their life
-7. Value should be assigned as an integer of copper pieces (cp), silver pieces (sp), electrum pieces (ep), gold pieces (gp), and platinum pieces (pp). 
-8. Use this table for reference on value : 
+8. Weapons MUST have a key 'Damage' 
+9. The description should be brief and puncy, or concise and thoughtful.
+10. The quote and SD Prompt MUST be inside double quotations ie " ".
+11. The quote is from the perspective of someone commenting on the impact of the {item} on their life
+12. Value should be assigned as an integer of copper pieces (cp), silver pieces (sp), electrum pieces (ep), gold pieces (gp), and platinum pieces (pp). 
+13. Use this table for reference on value : 
+
 1 cp 	1 lb. of wheat
 2 cp 	1 lb. of flour or one chicken
 5 cp 	1 lb. of salt
